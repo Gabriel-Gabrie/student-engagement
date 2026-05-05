@@ -29,11 +29,11 @@ Existing pivots are not affected; these append at the end of the export.
 
 | Form | New column | Notes |
 |---|---|---|
-| Visitor | Volunteer Name | Free text. Use this for shift attribution, not the auto-captured submitter email. |
 | Visitor | Time block | Morning / Afternoon / Evening. Use as a pivot row to see peak-hour patterns per campus. |
-| Outreach | Volunteer Name | Same. |
 | Outreach | Date of activity | This is the **event** date, not the submission date. Use it as your time axis. |
 | Outreach | Notes / Highlights | Free text. Skim weekly. |
+
+The auto-captured **Name** and **Email** columns (from Forms' "Record name" setting) are unchanged — these were already in the export. Since every volunteer signs in with their own `@conestogac.on.ca` account, those columns are now the source of truth for shift attribution.
 
 ### 4. Outreach Activity is now multi-select
 
@@ -74,4 +74,4 @@ Report them as two different metrics. Don't try to reconcile them — we'll get 
 1. **Time block × Campus → headcount** — shows which campuses need more presence at which times.
 2. **Time block × Category bucket → inquiry count** — shows what students need help with when.
 3. **Outreach theme × Campus (after the split) → headcount** — shows which themes resonate where.
-4. **Volunteer Name × Submission count** — sanity check that all volunteers are submitting.
+4. **Email × Submission count** — sanity check that all volunteers are submitting.

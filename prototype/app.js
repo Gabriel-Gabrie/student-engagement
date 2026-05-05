@@ -67,6 +67,15 @@ const OUTREACH_ACTIVITIES = [
 const VISITOR_KEY  = 'option_a_visitor_submissions';
 const OUTREACH_KEY = 'option_a_outreach_submissions';
 
+// In production, Microsoft Forms auto-captures the submitter's Name and Email
+// from the Conestoga login. In this static demo, we simulate that with a fixed
+// identity for live submissions. The seeded sample data uses varied identities
+// so the multi-volunteer view is still meaningful.
+const DEMO_USER = {
+  name:  'Demo User',
+  email: 'demo.user@conestogac.on.ca',
+};
+
 // ===== Storage =====
 
 function loadSubmissions(key) {
@@ -127,11 +136,6 @@ function renderVisitorForm(form) {
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Volunteer Name', true),
-    el('input', { type: 'text', name: 'volunteer', required: true, placeholder: 'First Last', autocomplete: 'name' }),
-  ]));
-
-  form.appendChild(el('div', { class: 'question' }, [
     questionLabel(q++, 'Time block this submission covers', true),
     el('div', { class: 'radio-list' },
       TIME_BLOCKS.map(tb => el('label', {}, [
@@ -189,8 +193,9 @@ function handleVisitorSubmit(e) {
   list.push({
     id: nextId('v', list),
     submittedAt: new Date().toISOString(),
+    submitterName:  DEMO_USER.name,
+    submitterEmail: DEMO_USER.email,
     campus: data.get('campus'),
-    volunteer: (data.get('volunteer') || '').trim(),
     timeBlock: data.get('timeBlock'),
     peopleHelped: parseInt(data.get('peopleHelped'), 10) || 0,
     counts,
@@ -213,11 +218,6 @@ function renderOutreachForm(form) {
       el('option', { value: '' }, 'Select your answer'),
       ...CAMPUSES.map(c => el('option', { value: c }, c)),
     ]),
-  ]));
-
-  form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Volunteer Name', true),
-    el('input', { type: 'text', name: 'volunteer', required: true, placeholder: 'First Last', autocomplete: 'name' }),
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
@@ -292,8 +292,9 @@ function handleOutreachSubmit(e) {
   list.push({
     id: nextId('o', list),
     submittedAt: new Date().toISOString(),
+    submitterName:  DEMO_USER.name,
+    submitterEmail: DEMO_USER.email,
     campus: data.get('campus'),
-    volunteer: (data.get('volunteer') || '').trim(),
     activityDate: data.get('activityDate'),
     peopleHelped: parseInt(data.get('peopleHelped'), 10) || 0,
     activities,
@@ -395,7 +396,7 @@ function buildVisitorTable(submissions) {
   }
 
   const headers = [
-    'ID', 'Submitted at', 'Campus', 'Volunteer Name', 'Time block', 'How many helped',
+    'ID', 'Submitted at', 'Name', 'Email', 'Campus', 'Time block', 'How many helped',
     ...VISITOR_CATEGORIES.map(c => c.label),
     'Others (Inquiry)',
   ];
@@ -403,8 +404,9 @@ function buildVisitorTable(submissions) {
     const cells = [
       s.id,
       formatTime(s.submittedAt),
+      s.submitterName  || '',
+      s.submitterEmail || '',
       s.campus,
-      s.volunteer,
       timeBlockLabel(s.timeBlock),
       String(s.peopleHelped ?? ''),
     ];
@@ -415,7 +417,7 @@ function buildVisitorTable(submissions) {
     cells.push(s.othersInquiry || '');
     return cells;
   });
-  return buildTable(headers, rows, 6);
+  return buildTable(headers, rows, 7);
 }
 
 function buildOutreachTable(submissions) {
@@ -423,14 +425,15 @@ function buildOutreachTable(submissions) {
     return el('p', { class: 'muted' }, 'No submissions yet.');
   }
   const headers = [
-    'ID', 'Submitted at', 'Campus', 'Volunteer Name', 'Date of activity',
+    'ID', 'Submitted at', 'Name', 'Email', 'Campus', 'Date of activity',
     'How many helped', 'Outreach Activity', 'Other activity (text)', 'Notes',
   ];
   const rows = submissions.map(s => [
     s.id,
     formatTime(s.submittedAt),
+    s.submitterName  || '',
+    s.submitterEmail || '',
     s.campus,
-    s.volunteer,
     s.activityDate || '',
     String(s.peopleHelped ?? ''),
     [
@@ -440,7 +443,7 @@ function buildOutreachTable(submissions) {
     s.otherActivity || '',
     s.notes || '',
   ]);
-  return buildTable(headers, rows, 5);
+  return buildTable(headers, rows, 6);
 }
 
 function buildTable(headers, rows, firstNumericIndex) {
@@ -488,12 +491,13 @@ function downloadCsv(type) {
 
 function visitorCsv(subs) {
   const headers = [
-    'ID', 'Submitted at', 'Campus', 'Volunteer Name', 'Time block', 'How many helped',
+    'ID', 'Submitted at', 'Name', 'Email', 'Campus', 'Time block', 'How many helped',
     ...VISITOR_CATEGORIES.map(c => c.label),
     'Others (Inquiry)',
   ];
   const rows = subs.map(s => [
-    s.id, s.submittedAt, s.campus, s.volunteer, timeBlockLabel(s.timeBlock), s.peopleHelped ?? 0,
+    s.id, s.submittedAt, s.submitterName || '', s.submitterEmail || '',
+    s.campus, timeBlockLabel(s.timeBlock), s.peopleHelped ?? 0,
     ...VISITOR_CATEGORIES.map(c => (s.counts || {})[c.key] ?? ''),
     s.othersInquiry || '',
   ]);
@@ -502,11 +506,12 @@ function visitorCsv(subs) {
 
 function outreachCsv(subs) {
   const headers = [
-    'ID', 'Submitted at', 'Campus', 'Volunteer Name', 'Date of activity',
+    'ID', 'Submitted at', 'Name', 'Email', 'Campus', 'Date of activity',
     'How many helped', 'Outreach Activity', 'Other activity (text)', 'Notes',
   ];
   const rows = subs.map(s => [
-    s.id, s.submittedAt, s.campus, s.volunteer, s.activityDate || '', s.peopleHelped ?? 0,
+    s.id, s.submittedAt, s.submitterName || '', s.submitterEmail || '',
+    s.campus, s.activityDate || '', s.peopleHelped ?? 0,
     [
       ...(s.activities || []),
       s.otherActivity ? `Other: ${s.otherActivity}` : null,
@@ -535,41 +540,49 @@ function clearAll() {
 }
 
 function seedSamples() {
+  const sampleSubmitters = {
+    maya:   { submitterName: 'Maya Patel',  submitterEmail: 'maya.patel@conestogac.on.ca' },
+    jordan: { submitterName: 'Jordan Lee',  submitterEmail: 'jordan.lee@conestogac.on.ca' },
+    aaron:  { submitterName: 'Aaron Chen',  submitterEmail: 'aaron.chen@conestogac.on.ca' },
+    priya:  { submitterName: 'Priya Singh', submitterEmail: 'priya.singh@conestogac.on.ca' },
+    sam:    { submitterName: 'Sam Rivera',  submitterEmail: 'sam.rivera@conestogac.on.ca' },
+  };
+
   const visitor = [
-    { campus: 'Doon',      volunteer: 'Maya Patel',   timeBlock: 'morning',
+    { ...sampleSubmitters.maya,   campus: 'Doon',      timeBlock: 'morning',
       submittedAt: '2026-04-28T11:30:00', peopleHelped: 8,
       counts: { wayfinding: 6, onecard: 2, it_support: 1 } },
-    { campus: 'Doon',      volunteer: 'Maya Patel',   timeBlock: 'afternoon',
+    { ...sampleSubmitters.maya,   campus: 'Doon',      timeBlock: 'afternoon',
       submittedAt: '2026-04-28T16:15:00', peopleHelped: 14,
       counts: { wayfinding: 12, bus_pass: 4, onecard: 3, timetable_registration: 2 } },
-    { campus: 'Waterloo',  volunteer: 'Jordan Lee',   timeBlock: 'afternoon',
+    { ...sampleSubmitters.jordan, campus: 'Waterloo',  timeBlock: 'afternoon',
       submittedAt: '2026-04-29T14:00:00', peopleHelped: 6,
       counts: { library_tech_loans: 3, library_research_writing: 2, mental_health: 1 } },
-    { campus: 'Doon',      volunteer: 'Aaron Chen',   timeBlock: 'evening',
+    { ...sampleSubmitters.aaron,  campus: 'Doon',      timeBlock: 'evening',
       submittedAt: '2026-04-29T19:00:00', peopleHelped: 12,
       counts: { wayfinding: 8, bus_pass: 3, csi_frosh_kits: 4, onecard: 2 } },
-    { campus: 'Reuter',    volunteer: 'Priya Singh',  timeBlock: 'morning',
+    { ...sampleSubmitters.priya,  campus: 'Reuter',    timeBlock: 'morning',
       submittedAt: '2026-04-30T11:00:00', peopleHelped: 4,
       counts: { immigration_advising: 2, intl_transition: 1, health_insurance: 1 } },
-    { campus: 'Cambridge', volunteer: 'Sam Rivera',   timeBlock: 'afternoon',
+    { ...sampleSubmitters.sam,    campus: 'Cambridge', timeBlock: 'afternoon',
       submittedAt: '2026-04-30T15:45:00', peopleHelped: 9,
       counts: { wayfinding: 5, timetable_registration: 3, change_program: 1, job_search: 2 } },
   ];
 
   const outreach = [
-    { campus: 'Doon',      volunteer: 'Maya Patel',   activityDate: '2026-03-08',
+    { ...sampleSubmitters.maya,   campus: 'Doon',      activityDate: '2026-03-08',
       submittedAt: '2026-03-08T17:00:00', peopleHelped: 47,
       activities: ["International Women's Day", 'Celebrating Diversity'],
       otherActivity: '', notes: 'Big turnout in atrium, ran out of pins by 1pm.' },
-    { campus: 'Waterloo',  volunteer: 'Jordan Lee',   activityDate: '2026-02-15',
+    { ...sampleSubmitters.jordan, campus: 'Waterloo',  activityDate: '2026-02-15',
       submittedAt: '2026-02-15T18:00:00', peopleHelped: 22,
       activities: ['Black History Month', 'CCR and SSP Promotion'],
       otherActivity: '', notes: '' },
-    { campus: 'Reuter',    volunteer: 'Priya Singh',  activityDate: '2026-02-07',
+    { ...sampleSubmitters.priya,  campus: 'Reuter',    activityDate: '2026-02-07',
       submittedAt: '2026-02-07T16:30:00', peopleHelped: 18,
       activities: ["Bell Let's Talk", 'Health and Wellness Outreach'],
       otherActivity: '', notes: 'Counselling sign-ups doubled vs last year.' },
-    { campus: 'Cambridge', volunteer: 'Sam Rivera',   activityDate: '2025-09-05',
+    { ...sampleSubmitters.sam,    campus: 'Cambridge', activityDate: '2025-09-05',
       submittedAt: '2025-09-05T16:00:00', peopleHelped: 65,
       activities: ['Campus Welcome Day'],
       otherActivity: '', notes: 'Frosh kits very popular; need 50% more next year.' },

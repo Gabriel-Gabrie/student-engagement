@@ -47,6 +47,16 @@ body {
 
 .banner a:hover { opacity: 1; text-decoration: underline; }
 
+.signed-in {
+  background: #f0f3f3;
+  color: #444;
+  padding: 6px 24px;
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--border);
+}
+.signed-in strong { color: #222; font-weight: 600; }
+.signed-in-note { color: var(--muted); margin-left: 4px; }
+
 .container {
   max-width: 760px;
   margin: 24px auto;

@@ -7,18 +7,19 @@ Apply these changes directly in the Forms editor. Both forms stay restricted to 
 ## Form 1 — Student Ambassador Outreach Tracking
 
 **Form description (replace existing):**
-> Welcome! Use this form to log outreach activities. Submit **one entry per day worked**, even for multi-day campaigns (Pride Month, Black History Month, etc.). Please record the volunteer's name explicitly — do not rely on the desk login.
+> Welcome! Use this form to log outreach activities. Submit **one entry per day worked**, even for multi-day campaigns (Pride Month, Black History Month, etc.). Your Conestoga login is captured automatically as the submitter.
 
 ### Question changes
 
 | # | Action | Question | Settings |
 |---|---|---|---|
 | 1 | Keep | Campus Name | Dropdown: Waterloo, Doon, Reuter, Cambridge. Required. |
-| 2 | **Add** | Volunteer Name | Short text. Required. |
-| 3 | **Add** | Date of activity | Date. Required. Default: today. |
-| 4 | **Modify** | How many people did you help at this activity? | Was 0–10 scale → change to **Number**. Restrictions: whole number, ≥ 0. Required. |
-| 5 | **Modify** | Outreach Activity | Was single-select radio → change to **multi-select (checkboxes)**. Keep all existing options + "Other" with text input. Required (at least one). |
-| 6 | **Add** | Notes / Highlights | Long text. Optional. |
+| 2 | **Add** | Date of activity | Date. Required. Default: today. |
+| 3 | **Modify** | How many people did you help at this activity? | Was 0–10 scale → change to **Number**. Restrictions: whole number, ≥ 0. Required. |
+| 4 | **Modify** | Outreach Activity | Was single-select radio → change to **multi-select (checkboxes)**. Keep all existing options + "Other" with text input. Required (at least one). |
+| 5 | **Add** | Notes / Highlights | Long text. Optional. |
+
+> **No Volunteer Name field.** Every volunteer signs in with their own `employeeid@conestogac.on.ca` account, so Forms' built-in **Record name** setting captures Name and Email automatically — no extra question needed.
 
 ---
 
@@ -32,9 +33,10 @@ Apply these changes directly in the Forms editor. Both forms stay restricted to 
 | # | Action | Question | Settings |
 |---|---|---|---|
 | 1 | Keep | Campus | Dropdown. Required. |
-| 2 | **Add** | Volunteer Name | Short text. Required. |
-| 3 | **Add** | Time block | Single choice. Options: `Morning (open–12pm)`, `Afternoon (12–4pm)`, `Evening (4pm–close)`. Required. |
-| 4 | **Modify** | How many people did you help during this time block? | Was 0–10 scale → change to **Number**. Whole number, ≥ 0. Required. |
+| 2 | **Add** | Time block | Single choice. Options: `Morning (open–12pm)`, `Afternoon (12–4pm)`, `Evening (4pm–close)`. Required. |
+| 3 | **Modify** | How many people did you help during this time block? | Was 0–10 scale → change to **Number**. Whole number, ≥ 0. Required. |
+
+> **No Volunteer Name field.** Same as the Outreach form — Forms' built-in **Record name** setting captures the volunteer's Conestoga Name and Email automatically.
 
 ### Inquiry categories — restructure into 6 sections
 
@@ -82,7 +84,7 @@ Use Forms **Sections** (the "Add new" → "Section" feature) for each header bel
 ## Forms settings checklist (both forms)
 
 - Settings → "Only people in my organization can respond" — **ON**
-- Settings → "Record name" — **ON** (audit trail; Volunteer Name field is the source of truth)
+- Settings → "Record name" — **ON** (this is what auto-captures the volunteer's Conestoga Name + Email; it's the sole source of submitter identity since every volunteer signs in with their own `employeeid@conestogac.on.ca` account)
 - Settings → "One response per person" — **OFF** (volunteers submit multiple times per shift)
 - For every Number question: Restrictions → **Number** → "Greater than or equal to 0" + "Whole number"
 
@@ -90,4 +92,4 @@ Use Forms **Sections** (the "Add new" → "Section" feature) for each header bel
 
 ## Migration note
 
-Existing Excel response sheets keep working. New columns (Volunteer Name, Time block, Date of activity, Notes) append to the right. Existing column order for inquiry categories is preserved. See `shannon-reporting-notes.md` for what changes in her pivots.
+Existing Excel response sheets keep working. New columns (Time block, Date of activity, Notes) append to the right. The auto-captured Name and Email columns from "Record name" stay where they are. Existing column order for inquiry categories is preserved. See `shannon-reporting-notes.md` for what changes in her pivots.

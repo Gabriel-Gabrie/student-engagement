@@ -20,11 +20,12 @@ Print this page and keep it at the desk.
 
 ## How to fill the Visitor form quickly
 
-1. **Always type your name** in the Volunteer Name field, even if you logged into the desk PC with your own account. Some desks share a login.
-2. **Pick the time block** you're reporting on.
-3. **Fill in only the categories that came up.** Skip past the rest — leave them blank. Blank = 0.
-4. The "How many people did you help" number at the top is the headcount of *people*. The category numbers below are the count of *inquiries*. One person can have multiple inquiries — that is fine and expected.
-5. If something came up that doesn't fit any category, count it under **Others** and describe it in **Others (Inquiry)**.
+You're already identified by your `@conestogac.on.ca` login — there's no name field to fill.
+
+1. **Pick the time block** you're reporting on.
+2. **Fill in only the categories that came up.** Skip past the rest — leave them blank. Blank = 0.
+3. The "How many people did you help" number at the top is the headcount of *people*. The category numbers below are the count of *inquiries*. One person can have multiple inquiries — that is fine and expected.
+4. If something came up that doesn't fit any category, count it under **Others** and describe it in **Others (Inquiry)**.
 
 ---
 
@@ -72,8 +73,7 @@ Print this page and keep it at the desk.
 
 ## How to fill the Outreach form
 
-1. Type your **Volunteer Name**.
-2. Pick the **Date** of the activity (not today's date if you're catching up later).
-3. Enter **how many people you helped** — actual number, no cap.
-4. Tick **every outreach theme** the activity covered (you can pick more than one — e.g., a Pride Month table that also promoted CCR).
-5. Use **Notes / Highlights** to call out anything Shannon should see (great conversations, media coverage, supplies running out, etc.).
+1. Pick the **Date** of the activity (not today's date if you're catching up later).
+2. Enter **how many people you helped** — actual number, no cap.
+3. Tick **every outreach theme** the activity covered (you can pick more than one — e.g., a Pride Month table that also promoted CCR).
+4. Use **Notes / Highlights** to call out anything Shannon should see (great conversations, media coverage, supplies running out, etc.).
