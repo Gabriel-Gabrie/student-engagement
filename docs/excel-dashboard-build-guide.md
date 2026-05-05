@@ -11,8 +11,7 @@ A single `.xlsx` file with these sheets:
 | Sheet | Purpose |
 |---|---|
 | `Visitor` | Live data sheet — Power Query refreshes from the Forms response file |
-| `Outreach` | Live data sheet — same, for outreach |
-| `Outreach (themes)` | Auto-split outreach rows — one row per theme via Power Query (so multi-select pivots cleanly) |
+| `Outreach` | Live data sheet — same, for outreach (one row per submission, since each submission is a single activity) |
 | `Dashboard` | KPI tiles, heatmap, charts, slicers, timeline — Shannon's main view |
 | `Reports — Weekly` | Same data, grouped by ISO week |
 | `Reports — Monthly` | Same data, grouped by month |
@@ -57,20 +56,9 @@ For **each form** (Visitor + Outreach):
 
 ### 2.2 Connect to Outreach responses
 
-Same as 2.1, but loaded into the `Outreach` sheet.
+Same as 2.1, but loaded into the `Outreach` sheet. No splitting step needed — outreach is single-select, so each submission is already one row with one activity.
 
-### 2.3 Build the auto-split "Outreach (themes)" query
-
-This solves the multi-select problem: each outreach row becomes N rows, one per theme. Pivots become trivial.
-
-1. **Data** → **Get Data** → **Combine Queries** → **Reference** → pick the Outreach query.
-2. Rename the new query: `Outreach themes`.
-3. In Power Query, select the **Outreach Activity** column.
-4. **Home** → **Split Column** → **By Delimiter** → **Custom: `;`** → **Advanced options** → **Split into: Rows**.
-5. Right-click the new column → **Transform** → **Trim** (kills leading spaces).
-6. **Close & Load To...** → load to the `Outreach (themes)` sheet.
-
-### 2.4 Set refresh to "on open" + every 5 minutes
+### 2.3 Set refresh to "on open" + every 5 minutes
 
 1. **Data** → **Queries & Connections** → right-click each query → **Properties**.
 2. Tick **Refresh data when opening the file** AND **Refresh every 5 minutes**.
@@ -103,7 +91,7 @@ Layout target:
 
 ### 3.1 Build the supporting pivot tables (hidden later)
 
-Add a hidden `_Pivots` sheet with these PivotTables, all sourced from the `Visitor` (or `Outreach themes`) table:
+Add a hidden `_Pivots` sheet with these PivotTables, all sourced from the `Visitor` or `Outreach` table:
 
 | Pivot name | Source | Rows | Columns | Values |
 |---|---|---|---|---|
@@ -111,7 +99,7 @@ Add a hidden `_Pivots` sheet with these PivotTables, all sourced from the `Visit
 | `pvTopCats` | Visitor | (one per category — see note) | — | Sum |
 | `pvDaily` | Visitor | Submitted at (grouped by Days) | — | Sum of `How many helped` |
 | `pvSections` | Visitor | Campus | Section bucket *(see 3.4)* | Sum of inquiries |
-| `pvOutreachThemes` | Outreach themes | Outreach Activity | — | Sum of `How many helped` |
+| `pvOutreachThemes` | Outreach | Outreach Activity | — | Sum of `How many helped` |
 | `pvOutreachCampus` | Outreach | Campus | — | Sum of `How many helped` |
 
 > **Top categories pivot:** since each category is a separate column on the Visitor sheet, the cleanest way is to first **unpivot** the 24 category columns in Power Query (Select all 24 → **Unpivot Columns**), creating a `Category | Count` pair per row. Then pivot on `Category` → Sum of `Count`. This is a one-time setup and makes Top Categories trivial to maintain when categories change.

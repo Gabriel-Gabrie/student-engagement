@@ -11,7 +11,7 @@ Both forms stay restricted to "Only people in my organization can respond" (Cone
 > **Title:** `Student Engagement - Outreach Tracking` (renamed from "Student Ambassador Outreach Tracking")
 
 **Form description (replace existing):**
-> Welcome! Use this form to log outreach activities. Submit **one entry per day worked**, even for multi-day campaigns (Pride Month, Black History Month, etc.). Your Conestoga login is captured automatically as the submitter.
+> Welcome! Use this form to log outreach activities. Submit **one entry per activity, per day worked** — if a table covered two activities at once (e.g., Pride Month + CCR), submit two separate entries with each entry's own headcount. For multi-day campaigns (Pride Month, Black History Month, etc.) submit a fresh entry each day. Your Conestoga login is captured automatically as the submitter.
 
 ### Question changes
 
@@ -20,7 +20,7 @@ Both forms stay restricted to "Only people in my organization can respond" (Cone
 | 1 | Keep | Campus | Dropdown: Waterloo, Doon, Reuter, Cambridge. Required. |
 | 2 | **Add** | Date of activity | Date. Required. Default: today. |
 | 3 | **Modify** | How many people did you help at this activity? | Was 0–10 scale → change to **Number**. Restrictions: whole number, ≥ 0. Required. |
-| 4 | **Modify** | Outreach Activity (select all that apply) | Was single-select radio → change to **multi-select (checkboxes)**. Keep all existing options + "Other" with text input. Required (at least one). |
+| 4 | Keep | Outreach Activity | Single-select radio. Keep all existing options + "Other" with text input. Required. **One activity per submission** — do NOT change to multi-select. |
 | 5 | **Add** | Notes / Highlights | Long text. Optional. |
 
 > **No Volunteer Name field.** Every volunteer signs in with their own `employeeid@conestogac.on.ca` account, so Forms' built-in **Record name** setting captures Name and Email automatically — no extra question needed.

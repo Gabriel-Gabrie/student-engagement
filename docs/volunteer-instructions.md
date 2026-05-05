@@ -79,5 +79,5 @@ The form is grouped into 7 sections. The first section ("Common Help") covers th
 
 1. Pick the **Date** of the activity (not today's date if you're catching up later).
 2. Enter **how many people you helped** — actual number, no cap.
-3. Tick **every outreach theme** the activity covered (you can pick more than one — e.g., a Pride Month table that also promoted CCR).
+3. Pick the **outreach theme** — one per submission. If your table covered two themes at once (e.g., Pride Month + CCR Promotion), submit the form twice, once per theme, each with its own headcount. Don't double-count people who engaged with both — pick whichever theme drove their visit.
 4. Use **Notes / Highlights** to call out anything Shannon should see (great conversations, media coverage, supplies running out, etc.).

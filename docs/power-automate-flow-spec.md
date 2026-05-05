@@ -83,23 +83,32 @@ if(or(or(or(or(or(
 
 ---
 
-## Flow 2: Outreach submission → 1+N rows in tblOutreach
+## Flow 2: Outreach submission → 1 row in tblOutreach
 
-Outreach is multi-select, and we want one row per theme so the dashboard's multi-select pivot is trivial. So this flow loops over the selected themes.
+Outreach is single-select (one activity per submission), so this flow is a straight "submission → row" mapping with no loops.
 
 ### Steps
 
 1. New flow: `Outreach Tracking → Live Feed`.
 2. Trigger: **When a new response is submitted** → form: `Student Engagement - Outreach Tracking`.
 3. Action: **Get response details**.
-4. Action: **Compose** — split the multi-select Outreach Activity field on `;` into an array:
-   - Inputs: `split(outputs('Get_response_details')?['body/<outreach-activity-questionId>'], ';')`
-5. Action: **Apply to each** → loop over the output of the Compose action. Inside the loop:
-   - Action: **Add a row into a table** → `tblOutreach`. Set `Outreach Activity` to `trim(items('Apply_to_each'))`. All other fields the same across iterations (Campus, Date, How many helped, etc.).
-6. (Optional) After the loop: add a single Teams notification action — "Posted: outreach activity at <Campus> on <Date>, helped <N>". Sends to a Teams channel for visibility.
-7. Save → test.
+4. Action: **Add a row into a table** → `tblOutreach`. Map columns:
 
-If Outreach Activity is empty (only "Other" with text), the split loop runs once with the empty value — add an `if condition` at the start of the loop body to skip empty iterations and instead write one row using the "Other" text in place of Outreach Activity.
+| Column in tblOutreach | Source field |
+|---|---|
+| `Submission ID` | Response Id |
+| `Submitted at` | Submission time |
+| `Name` | Name |
+| `Email` | Email |
+| `Campus` | Campus answer |
+| `Date of activity` | Date answer |
+| `How many helped` | "How many people did you help…" answer |
+| `Outreach Activity` | Outreach Activity answer (the selected option, or "Other") |
+| `Other activity (text)` | Free-text "Other" answer (empty unless "Other" was selected) |
+| `Notes` | Notes / Highlights |
+
+5. (Optional) Add a Teams notification action after the row write — "Posted: <Outreach Activity> at <Campus> on <Date>, helped <N>". Sends to a Teams channel for visibility.
+6. Save → test.
 
 ---
 
@@ -180,4 +189,4 @@ Other activity (text)
 Notes
 ```
 
-> When using Flow 2's loop, multiple rows share the same `Submission ID` but have different `Outreach Activity` values. That's expected — the dashboard's pivots use `Submission ID` only for de-duplication when computing headcount metrics; theme-level rollups naturally count each theme row.
+> Each outreach submission produces exactly one row. If a volunteer ran two activities at the same table, they submit the form twice — that's two rows with the same date and campus but different `Outreach Activity` and `Submission ID`.

@@ -232,30 +232,32 @@ function renderOutreachForm(form) {
     }),
   ]));
 
-  const list = el('div', { class: 'checkbox-list' },
+  const list = el('div', { class: 'radio-list' },
     OUTREACH_ACTIVITIES.map(a => el('label', {}, [
-      el('input', { type: 'checkbox', name: 'activity', value: a }),
+      el('input', { type: 'radio', name: 'activity', value: a, required: true }),
       a,
     ]))
   );
 
-  const otherCheck = el('input', { type: 'checkbox', name: 'activity', value: '__other__' });
+  const otherRadio = el('input', { type: 'radio', name: 'activity', value: '__other__', required: true });
   const otherText  = el('input', {
     type: 'text', name: 'otherActivity', placeholder: 'Describe the other activity…',
     disabled: true, class: 'inline-text',
   });
-  otherCheck.addEventListener('change', () => {
-    otherText.disabled = !otherCheck.checked;
-    if (!otherCheck.checked) otherText.value = '';
+  list.addEventListener('change', () => {
+    const isOther = otherRadio.checked;
+    otherText.disabled = !isOther;
+    if (!isOther) otherText.value = '';
     else otherText.focus();
   });
   list.appendChild(el('div', { class: 'other-row' }, [
-    el('label', {}, [otherCheck, 'Other:']),
+    el('label', {}, [otherRadio, 'Other:']),
     otherText,
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel('Outreach Activity (select all that apply)', true),
+    questionLabel('Outreach Activity', true),
+    el('p', { class: 'help' }, 'Select one. If your event covered two activities, submit two separate entries.'),
     list,
   ]));
 
@@ -277,13 +279,13 @@ function handleOutreachSubmit(e) {
   const form = e.target;
   const data = new FormData(form);
 
-  const all = data.getAll('activity');
-  const activities = all.filter(a => a !== '__other__');
-  const otherChecked = all.includes('__other__');
-  const otherActivity = otherChecked ? (data.get('otherActivity') || '').trim() : '';
+  const selected = data.get('activity');
+  const isOther = selected === '__other__';
+  const otherActivity = isOther ? (data.get('otherActivity') || '').trim() : '';
+  const activity = isOther ? 'Other' : selected;
 
-  if (activities.length === 0 && !otherActivity) {
-    alert('Please select at least one outreach activity (or fill in "Other").');
+  if (!activity || (isOther && !otherActivity)) {
+    alert('Please select an outreach activity (or fill in "Other").');
     return;
   }
 
@@ -296,7 +298,7 @@ function handleOutreachSubmit(e) {
     campus: data.get('campus'),
     activityDate: data.get('activityDate'),
     peopleHelped: parseInt(data.get('peopleHelped'), 10) || 0,
-    activities,
+    activity,
     otherActivity,
     notes: (data.get('notes') || '').trim(),
   });
@@ -370,7 +372,9 @@ function buildOutreachSummary(submissions) {
   const totalHelped = submissions.reduce((a, s) => a + (s.peopleHelped || 0), 0);
   const themeTotals = {};
   for (const s of submissions) {
-    for (const a of (s.activities || [])) themeTotals[a] = (themeTotals[a] || 0) + (s.peopleHelped || 0);
+    const key = outreachActivityLabel(s);
+    if (!key) continue;
+    themeTotals[key] = (themeTotals[key] || 0) + (s.peopleHelped || 0);
   }
   const topTheme = Object.entries(themeTotals).sort((a, b) => b[1] - a[1])[0];
 
@@ -419,6 +423,15 @@ function buildVisitorTable(submissions) {
   return buildTable(headers, rows, 7);
 }
 
+function outreachActivityLabel(s) {
+  // New single-select shape: s.activity is a string (theme name or "Other")
+  if (s.activity === 'Other' && s.otherActivity) return `Other: ${s.otherActivity}`;
+  if (s.activity) return s.activity;
+  // Legacy multi-select shape (transitional fallback)
+  if (Array.isArray(s.activities) && s.activities.length) return s.activities.join('; ');
+  return s.otherActivity ? `Other: ${s.otherActivity}` : '';
+}
+
 function buildOutreachTable(submissions) {
   if (submissions.length === 0) {
     return el('p', { class: 'muted' }, 'No submissions yet.');
@@ -435,10 +448,7 @@ function buildOutreachTable(submissions) {
     s.campus,
     s.activityDate || '',
     String(s.peopleHelped ?? ''),
-    [
-      ...(s.activities || []),
-      s.otherActivity ? `Other: ${s.otherActivity}` : null,
-    ].filter(Boolean).join('; '),
+    outreachActivityLabel(s),
     s.otherActivity || '',
     s.notes || '',
   ]);
@@ -511,10 +521,7 @@ function outreachCsv(subs) {
   const rows = subs.map(s => [
     s.id, s.submittedAt, s.submitterName || '', s.submitterEmail || '',
     s.campus, s.activityDate || '', s.peopleHelped ?? 0,
-    [
-      ...(s.activities || []),
-      s.otherActivity ? `Other: ${s.otherActivity}` : null,
-    ].filter(Boolean).join('; '),
+    outreachActivityLabel(s),
     s.otherActivity || '',
     s.notes || '',
   ]);
@@ -571,19 +578,23 @@ function seedSamples() {
   const outreach = [
     { ...sampleSubmitters.maya,   campus: 'Doon',      activityDate: '2026-03-08',
       submittedAt: '2026-03-08T17:00:00', peopleHelped: 47,
-      activities: ["International Women's Day", 'Celebrating Diversity'],
+      activity: "International Women's Day",
       otherActivity: '', notes: 'Big turnout in atrium, ran out of pins by 1pm.' },
+    { ...sampleSubmitters.maya,   campus: 'Doon',      activityDate: '2026-03-08',
+      submittedAt: '2026-03-08T17:05:00', peopleHelped: 19,
+      activity: 'Celebrating Diversity',
+      otherActivity: '', notes: 'Same table as IWD; logged separately per Shannon’s tracking model.' },
     { ...sampleSubmitters.jordan, campus: 'Waterloo',  activityDate: '2026-02-15',
       submittedAt: '2026-02-15T18:00:00', peopleHelped: 22,
-      activities: ['Black History Month', 'CCR and SSP Promotion'],
+      activity: 'Black History Month',
       otherActivity: '', notes: '' },
     { ...sampleSubmitters.priya,  campus: 'Reuter',    activityDate: '2026-02-07',
       submittedAt: '2026-02-07T16:30:00', peopleHelped: 18,
-      activities: ["Bell Let's Talk", 'Health and Wellness Outreach'],
+      activity: "Bell Let's Talk",
       otherActivity: '', notes: 'Counselling sign-ups doubled vs last year.' },
     { ...sampleSubmitters.sam,    campus: 'Cambridge', activityDate: '2025-09-05',
       submittedAt: '2025-09-05T16:00:00', peopleHelped: 65,
-      activities: ['Campus Welcome Day'],
+      activity: 'Campus Welcome Day',
       otherActivity: '', notes: 'Frosh kits very popular; need 50% more next year.' },
   ];
 
@@ -994,7 +1005,7 @@ function renderOutreachRow(row, outreach) {
 
   const themeTile = el('div', { class: 'dash-tile' }, [
     el('div', { class: 'dash-tile-title' }, 'Top outreach themes'),
-    el('div', { class: 'dash-tile-sub' }, 'People helped per theme (multi-select aware)'),
+    el('div', { class: 'dash-tile-sub' }, 'Sum of people helped per outreach theme'),
   ]);
   const themeWrap = el('div', { class: 'chart-wrap' });
   const themeCanvas = el('canvas');
@@ -1019,8 +1030,8 @@ function renderOutreachRow(row, outreach) {
 function drawOutreachThemesChart(canvas, outreach) {
   const themes = {};
   for (const s of outreach) {
-    for (const a of (s.activities || [])) themes[a] = (themes[a] || 0) + (s.peopleHelped || 0);
-    if (s.otherActivity) themes[`Other: ${s.otherActivity}`] = (themes[`Other: ${s.otherActivity}`] || 0) + (s.peopleHelped || 0);
+    const key = outreachActivityLabel(s) || '(no theme)';
+    themes[key] = (themes[key] || 0) + (s.peopleHelped || 0);
   }
   const sorted = Object.entries(themes).sort((a, b) => b[1] - a[1]);
 
@@ -1091,7 +1102,7 @@ function renderRecentList(host, outreach) {
     host.appendChild(el('div', { class: 'recent-item' }, [
       el('div', { class: 'recent-date' }, s.activityDate || ''),
       el('div', { class: 'recent-body' }, [
-        el('div', { class: 'recent-body-main' }, `${s.campus} — ${(s.activities || []).join(', ') || s.otherActivity || '(no theme)'}`),
+        el('div', { class: 'recent-body-main' }, `${s.campus} — ${outreachActivityLabel(s) || '(no theme)'}`),
         s.notes ? el('div', { class: 'recent-themes' }, s.notes) : null,
       ]),
       el('div', { class: 'recent-helped' }, `${s.peopleHelped || 0}`),

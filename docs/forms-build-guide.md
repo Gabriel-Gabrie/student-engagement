@@ -41,13 +41,13 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 ### How to add a Section
 **+ Add new** → **Section** (the icon shows a horizontal split line). Type the section title and optional description. All subsequent questions belong to that section until you add another.
 
-### How to add a multi-select Choice question with "Other"
+### How to add a Choice question with "Other"
 1. **+ Add new** → **Choice**.
 2. Type the question.
 3. Add options one per line.
 4. Click **Add "Other" option** at the bottom of the option list — Forms wires up a free-text input to that choice automatically.
-5. **"..."** → toggle **Multiple answers** ON.
-6. Drop-down list: OFF.
+5. **"..."** → leave **Multiple answers** OFF (single-select radio).
+6. Drop-down list: OFF for visible radio buttons; ON only when there are too many options to display inline (like Campus).
 
 ---
 
@@ -57,7 +57,7 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 - `forms.office.com` → **+ New Form**
 - **Title:** `Student Engagement - Outreach Tracking`
 - **Description:**
-  > Welcome! Use this form to log outreach activities. Submit one entry per day worked, even for multi-day campaigns (Pride Month, Black History Month, etc.). Your Conestoga login is captured automatically as the submitter.
+  > Welcome! Use this form to log outreach activities. Submit one entry per activity, per day worked — if a table covered two activities at once, submit two separate entries. For multi-day campaigns (Pride Month, Black History Month, etc.) submit a fresh entry each day. Your Conestoga login is captured automatically as the submitter.
 
 ### 1.2 Add the questions in this order
 
@@ -66,7 +66,7 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 | 1 | Choice | `Campus` | ✅ | Options: `Waterloo`, `Doon`, `Reuter`, `Cambridge`. **Drop-down list: ON** (in "..."). |
 | 2 | Date | `Date of activity` | ✅ | — |
 | 3 | Number | `How many people did you help at this activity?` | ✅ | Apply Number pattern. |
-| 4 | Choice (multi-select) | `Outreach Activity (select all that apply)` | ✅ | See option list below. **Multiple answers: ON.** Click **Add "Other" option**. |
+| 4 | Choice (single-select) | `Outreach Activity` | ✅ | See option list below. **Multiple answers: OFF** (one activity per submission). Click **Add "Other" option**. |
 | 5 | Text (long answer) | `Notes / Highlights` | — | **"..."** → toggle **Long answer: ON**. Required: OFF. |
 
 **Q4 options (in order):**
@@ -89,9 +89,9 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 - ❌ **Accept responses** *(turn ON only when ready to launch)*
 
 ### 1.4 Test
-1. **Preview** → fill it as a Pride Month + CCR table, multi-select both → Submit.
-2. **Responses** → click the Excel icon → confirm columns match what's in `shannon-reporting-notes.md`.
-3. Delete the test response (Responses → "..." → **Delete all responses**).
+1. **Preview** → fill it as a Pride Month table → Submit. Then fill it again as a CCR Promotion entry on the same date → Submit. (Two separate submissions, one per activity.)
+2. **Responses** → click the Excel icon → confirm columns match what's in `shannon-reporting-notes.md`. The two submissions should appear as two rows.
+3. Delete the test responses (Responses → "..." → **Delete all responses**).
 
 ---
 

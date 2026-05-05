@@ -45,21 +45,11 @@ Existing pivots are not affected; these append at the end of the export.
 
 The auto-captured **Name** and **Email** columns (from Forms' "Record name" setting) are unchanged — these were already in the export. Since every volunteer signs in with their own `@conestogac.on.ca` account, those columns are now the source of truth for shift attribution.
 
-### 4. Outreach Activity is now multi-select
+### 4. Outreach Activity stays single-select
 
-Instead of a single value like `Pride Month`, the cell can contain multiple values, typically separated by `;` or `, ` depending on the export.
+Each outreach submission represents **one** activity, even if a table covered two themes simultaneously. In that case the volunteer submits the form twice — once per theme — with each submission's own headcount. So `Outreach Activity` is a single value per row (e.g., `Pride Month` or `Other`). No semicolon-splitting, no Power Query unpivot — pivots Just Work.
 
-**Example cell:** `Pride Month; CCR and SSP Promotion`
-
-To pivot by individual activity, split the column into rows once before pivoting:
-
-1. Open the file in Excel → **Data → From Table/Range** (Power Query).
-2. Select the **Outreach Activity** column.
-3. **Home → Split Column → By Delimiter** → choose `;` (or whatever your export uses) → **Advanced options → Split into: Rows**.
-4. **Close & Load** back to the sheet.
-5. Pivot as usual. A single submission with two themes now produces two rows — one per theme — and your per-theme totals reflect every event the theme appeared in.
-
-If you'd rather not use Power Query, a simpler-but-rougher approach is to filter `Outreach Activity` cells with `*Pride Month*` (using `COUNTIF(range, "*Pride Month*")`) for each theme. Less precise but no setup.
+If a volunteer submits twice on the same date for the same campus, that's expected. Check `Submission ID` and `Submitted at` to distinguish them.
 
 ### 5. Total-headcount question on Visitor form was reworded
 
@@ -83,5 +73,5 @@ Report them as two different metrics. Don't try to reconcile them — we'll get 
 
 1. **Time block × Campus → headcount** — shows which campuses need more presence at which times.
 2. **Time block × Category bucket → inquiry count** — shows what students need help with when.
-3. **Outreach theme × Campus (after the split) → headcount** — shows which themes resonate where.
+3. **Outreach Activity × Campus → sum of headcount** — shows which themes resonate where (no splitting needed).
 4. **Email × Submission count** — sanity check that all volunteers are submitting.

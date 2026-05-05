@@ -60,7 +60,7 @@ Follow [`forms-build-guide.md`](forms-build-guide.md) end to end. By the end of 
 
 1. Toggle "Accept responses" ON for both forms.
 2. Click **Preview** → submit a test on the Visitor form using realistic data (Doon, Afternoon, helped 23, Wayfinding 10, Bus Pass 4).
-3. Submit a test on the Outreach form (Doon, today, helped 47, multi-select International Women's Day + Celebrating Diversity, type a note).
+3. Submit a test on the Outreach form (Doon, today, helped 47, International Women's Day, type a note). Submit a second test for the same date with Celebrating Diversity, helped 19, to verify two-activities-same-table tracking.
 4. Verify both responses appear in the Forms **Responses** tab.
 
 ### Step 3 — Wire up the live data files (10 min)
