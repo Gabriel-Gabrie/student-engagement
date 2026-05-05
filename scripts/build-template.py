@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """
-Build the starter Excel dashboard template for Option A+.
+Build the starter Excel dashboard template for Option A+ (v2 — long-format).
+
+Schema matches the user's actual Microsoft Forms export shape (with the
+question-text column names like "How many people did you help during this
+time block?" intact). Categories are unpivoted into a long-format
+`tblVisitorLong` table by Power Query so the dashboard's "Inquiries logged"
+KPI and Top Categories chart auto-handle new categories without formula
+changes.
 
 Usage (from repo root):
     python scripts/build-template.py
@@ -9,28 +16,19 @@ Output:
     templates/student-engagement-dashboard-starter.xlsx
 """
 
+from datetime import datetime
 from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.chart import BarChart, Reference
-from openpyxl.chart.label import DataLabelList
 from openpyxl.formatting.rule import ColorScaleRule
-from openpyxl.styles import (
-    Alignment,
-    Border,
-    Font,
-    PatternFill,
-    Side,
-)
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
-from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 # ---------- Style palette ----------
 TEAL = "036C70"
 TEAL_DARK = "024C4F"
 TEAL_MID = "5CBAB1"
-TEAL_LIGHT = "D6F0EB"
 GREY_BG = "F7FAFA"
 GREY_BORDER = "D1D1D1"
 GREY_TEXT = "707070"
@@ -39,91 +37,98 @@ WHITE = "FFFFFF"
 
 # ---------- Domain constants ----------
 CAMPUSES = ["Waterloo", "Doon", "Reuter", "Cambridge"]
-TIME_BLOCKS = [
-    "Morning (open – 12pm)",
-    "Afternoon (12 – 4pm)",
-    "Evening (4pm – close)",
-]
 
+# Time-block label values are fuzzy — use a wildcard match in formulas so
+# changes to the option text (e.g., en-dash vs hyphen, parens variations)
+# don't break the heatmap.
+TIME_BLOCK_PREFIXES = ["Morning", "Afternoon", "Evening"]
+
+# Forms exports the column names exactly as the user typed the questions.
+# This list mirrors the user's current form (ASCII hyphens, "Wayfinding"
+# without "– General"). The dashboard never sums these as 24 individual
+# columns — the long-format table handles that — so adding a new category
+# in Forms is a no-op for the dashboard.
 CATEGORIES = [
-    # Section 1 — Common Help
-    "Wayfinding – General",
+    "Wayfinding",
     "OneCard",
     "IT Support",
     "Bus Pass / Transportation",
     "Parking",
     "Timetable / Registration Concern",
-    # Section 2 — Academic & Registration
     "Student Fees / Student Financial Services",
     "Learning Services / Math Help / Tutors",
     "Want to Change Program",
     "Connect with Faculty / Program Coordinator / Chair",
-    # Section 3 — Health & Wellness
     "Health Insurance",
     "Mental Health Support / Counselling",
     "Medical Clinic / Medical Care",
-    # Section 4 — Housing & Career
     "Housing / Accommodation",
     "Job Search / Career Services",
-    # Section 5 — International
     "Immigration / International Student Advising Referral",
     "International Transition Services",
-    "International Admissions – Second Program",
-    # Section 6 — Library
-    "Library – Tech Loans / TeachMeTech",
-    "Library – Research / Writing Consultants",
-    "Library – Academic Integrity",
-    # Section 7 — CSI & Other
-    "CSI – Frosh Kits",
-    "CSI – Peer Advocates",
+    "International Admissions - Second Program",
+    "Library - Tech Loans / TeachMeTech",
+    "Library - Research / Writing Consultants",
+    "Library - Academic Integrity",
+    "CSI - Frosh Kits",
+    "CSI - Peer Advocates",
     "Others",
 ]
 
+# Visitor wide table — matches the Forms export shape exactly.
+HEADCOUNT_COL = "How many people did you help during this time block?"
+TIME_BLOCK_COL = "Time block this submission covers"
+
 VISITOR_COLS = [
-    "Submission ID",
-    "Submitted at",
-    "Name",
+    "Id",
+    "Start time",
+    "Completion time",
     "Email",
+    "Name",
     "Campus",
-    "Time block",
-    "How many helped",
+    TIME_BLOCK_COL,
+    HEADCOUNT_COL,
     *CATEGORIES,
     "Others (Inquiry)",
 ]
 
-OUTREACH_COLS = [
-    "Submission ID",
-    "Submitted at",
-    "Name",
+# Visitor long-format table — what Power Query produces after Unpivoting
+# the 24 category columns. Used by the Top Categories chart and the
+# "Inquiries logged" KPI so new categories show up automatically.
+VISITOR_LONG_COLS = [
+    "Id",
+    "Completion time",
     "Email",
+    "Name",
     "Campus",
-    "Date of activity",
-    "How many helped",
-    "Outreach Activity",
-    "Other activity (text)",
-    "Notes",
+    TIME_BLOCK_COL,
+    "Category",
+    "Count",
 ]
 
-OUTREACH_THEMES = [
-    "Bell Let's Talk",
-    "Black History Month",
-    "Campus Welcome Day",
-    "CCR and SSP Promotion",
-    "Celebrating Diversity",
-    "Health and Wellness Outreach",
-    "International Women's Day",
-    "Pride Month",
-    "Sexual Health Week",
-    "Other",
+# Outreach wide table — matches the Forms export shape exactly.
+OUTREACH_HEADCOUNT_COL = "How many people attended the outreach activity?"
+OUTREACH_DATE_COL = "Date of outreach activity"
+
+OUTREACH_COLS = [
+    "Id",
+    "Start time",
+    "Completion time",
+    "Email",
+    "Name",
+    "Campus",
+    OUTREACH_DATE_COL,
+    OUTREACH_HEADCOUNT_COL,
+    "Outreach Activity",
 ]
 
 
 # ---------- Style helpers ----------
-def fill(color: str) -> PatternFill:
+def fill(color):
     return PatternFill("solid", fgColor=color)
 
 
-def border(color: str = GREY_BORDER) -> Border:
+def border(color=GREY_BORDER):
     s = Side(border_style="thin", color=color)
     return Border(left=s, right=s, top=s, bottom=s)
 
@@ -133,25 +138,52 @@ HEADER_FILL = fill(TEAL)
 TITLE_FONT = Font(name="Calibri", size=20, bold=True, color=TEAL_DARK)
 SECTION_FONT = Font(name="Calibri", size=12, bold=True, color=WHITE)
 KPI_VALUE_FONT = Font(name="Calibri", size=22, bold=True, color=TEAL_DARK)
-KPI_LABEL_FONT = Font(
-    name="Calibri", size=9, bold=True, color=GREY_TEXT
-)
+KPI_LABEL_FONT = Font(name="Calibri", size=9, bold=True, color=GREY_TEXT)
 HELP_TEXT_FONT = Font(name="Calibri", size=10, color=GREY_TEXT, italic=True)
 BODY_FONT = Font(name="Calibri", size=11, color=TEXT)
 
 
-# ---------- Sheet builders ----------
-def build_data_sheet(ws, columns, table_name):
-    """Create an Excel structured table with the given columns.
+def add_section_header(ws, row, text, span=8):
+    cell = ws.cell(row=row, column=1, value=text)
+    cell.font = SECTION_FONT
+    cell.fill = HEADER_FILL
+    cell.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=span)
+    ws.row_dimensions[row].height = 22
 
-    Includes 3 placeholder data rows with distinct dates in
-    `Submitted at` / `Date of activity` so that Excel can recognize the
-    date column as a date type AND derive a multi-day range, which is
-    required for Timeline slicer creation. All three rows have
-    `How many helped` = 0 so they don't affect totals; Power Query
-    "Replace" wipes them when real data flows in.
+
+def kpi_tile(ws, row, col, label, formula, sub_formula=None):
+    title = ws.cell(row=row, column=col, value=label)
+    title.font = KPI_LABEL_FONT
+    title.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    title.fill = fill(GREY_BG)
+    title.border = Border(top=Side(border_style="medium", color=TEAL))
+    ws.merge_cells(start_row=row, start_column=col, end_row=row, end_column=col + 2)
+
+    val = ws.cell(row=row + 1, column=col, value=formula)
+    val.font = KPI_VALUE_FONT
+    val.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+    val.fill = fill(GREY_BG)
+    ws.merge_cells(start_row=row + 1, start_column=col, end_row=row + 1, end_column=col + 2)
+
+    sub = ws.cell(row=row + 2, column=col, value=sub_formula or "")
+    sub.font = HELP_TEXT_FONT
+    sub.alignment = Alignment(horizontal="left", vertical="top", indent=1)
+    sub.fill = fill(GREY_BG)
+    ws.merge_cells(start_row=row + 2, start_column=col, end_row=row + 2, end_column=col + 2)
+
+    ws.row_dimensions[row].height = 16
+    ws.row_dimensions[row + 1].height = 30
+    ws.row_dimensions[row + 2].height = 16
+
+
+# ---------- Sheet builders ----------
+def build_data_sheet(ws, columns, table_name, date_columns):
+    """Empty wide-format data table with placeholder rows.
+
+    Adds 3 placeholder rows with distinct dates so Excel can build a
+    Timeline. Power Query's "Replace" wipes them on first real load.
     """
-    from datetime import datetime
     sentinel_dates = [
         datetime(2024, 1, 1),
         datetime(2024, 6, 15),
@@ -165,193 +197,157 @@ def build_data_sheet(ws, columns, table_name):
         cell.alignment = Alignment(horizontal="left", vertical="center")
         cell.border = border()
 
-    # 3 placeholder data rows with distinct dates so Excel can build a Timeline.
-    n_placeholder_rows = len(sentinel_dates)
+    n_rows = len(sentinel_dates)
     for row_offset, sentinel_date in enumerate(sentinel_dates):
         row = 2 + row_offset
         for idx, col_name in enumerate(columns, start=1):
             cell = ws.cell(row=row, column=idx)
-            if col_name in ("Submitted at", "Date of activity"):
+            if col_name in date_columns:
                 cell.value = sentinel_date
-                cell.number_format = (
-                    "yyyy-mm-dd hh:mm"
-                    if col_name == "Submitted at"
-                    else "yyyy-mm-dd"
-                )
-            elif col_name == "How many helped" or col_name in CATEGORIES:
+                cell.number_format = "yyyy-mm-dd hh:mm" if "time" in col_name.lower() else "yyyy-mm-dd"
+            elif col_name == HEADCOUNT_COL or col_name == OUTREACH_HEADCOUNT_COL or col_name in CATEGORIES:
                 cell.value = 0
+            elif col_name == "Id":
+                cell.value = row_offset + 1
             else:
                 cell.value = None
 
-    last_col_letter = get_column_letter(len(columns))
-    last_row = 1 + n_placeholder_rows
-    table_range = f"A1:{last_col_letter}{last_row}"
-
-    table = Table(displayName=table_name, ref=table_range)
+    last_col = get_column_letter(len(columns))
+    table = Table(displayName=table_name, ref=f"A1:{last_col}{1 + n_rows}")
     table.tableStyleInfo = TableStyleInfo(
-        name="TableStyleMedium2",
-        showFirstColumn=False,
-        showLastColumn=False,
-        showRowStripes=True,
-        showColumnStripes=False,
+        name="TableStyleMedium2", showRowStripes=True
     )
     ws.add_table(table)
 
-    # Column widths
     for idx, col_name in enumerate(columns, start=1):
-        # Reasonable widths based on header length
-        width = max(14, min(50, len(col_name) + 4))
-        ws.column_dimensions[get_column_letter(idx)].width = width
+        ws.column_dimensions[get_column_letter(idx)].width = max(14, min(50, len(col_name) + 4))
 
     ws.row_dimensions[1].height = 28
     ws.freeze_panes = "A2"
     return ws
 
 
-def add_section_header(ws, row, text, span=8):
-    """Insert a teal section divider that spans the dashboard width."""
-    cell = ws.cell(row=row, column=1, value=text)
-    cell.font = SECTION_FONT
-    cell.fill = HEADER_FILL
-    cell.alignment = Alignment(horizontal="left", vertical="center", indent=1)
-    ws.merge_cells(
-        start_row=row, start_column=1, end_row=row, end_column=span
-    )
-    ws.row_dimensions[row].height = 22
+def build_visitor_long_sheet(ws):
+    """Empty long-format table with placeholder rows for Timeline support."""
+    sentinel_dates = [
+        datetime(2024, 1, 1),
+        datetime(2024, 6, 15),
+        datetime(2024, 12, 31),
+    ]
 
+    columns = VISITOR_LONG_COLS
+    for idx, col_name in enumerate(columns, start=1):
+        cell = ws.cell(row=1, column=idx, value=col_name)
+        cell.font = HEADER_FONT
+        cell.fill = HEADER_FILL
+        cell.alignment = Alignment(horizontal="left", vertical="center")
+        cell.border = border()
 
-def kpi_tile(ws, row, col, label, formula, sub_formula=None):
-    """Build a styled 3-row KPI tile starting at (row, col), 3 columns wide."""
-    title_cell = ws.cell(row=row, column=col, value=label)
-    title_cell.font = KPI_LABEL_FONT
-    title_cell.alignment = Alignment(
-        horizontal="left", vertical="center", indent=1
-    )
-    title_cell.fill = fill(GREY_BG)
-    title_cell.border = Border(top=Side(border_style="medium", color=TEAL))
-    ws.merge_cells(
-        start_row=row, start_column=col, end_row=row, end_column=col + 2
-    )
+    # 3 placeholder rows, one per sentinel date, with dummy category data
+    for row_offset, sentinel_date in enumerate(sentinel_dates):
+        row = 2 + row_offset
+        ws.cell(row=row, column=1, value=row_offset + 1)  # Id
+        ws.cell(row=row, column=2, value=sentinel_date)   # Completion time
+        ws.cell(row=row, column=2).number_format = "yyyy-mm-dd hh:mm"
+        ws.cell(row=row, column=3, value=None)            # Email
+        ws.cell(row=row, column=4, value=None)            # Name
+        ws.cell(row=row, column=5, value=None)            # Campus
+        ws.cell(row=row, column=6, value=None)            # Time block
+        ws.cell(row=row, column=7, value="(placeholder)")  # Category
+        ws.cell(row=row, column=8, value=0)                # Count
 
-    value_cell = ws.cell(row=row + 1, column=col, value=formula)
-    value_cell.font = KPI_VALUE_FONT
-    value_cell.alignment = Alignment(
-        horizontal="left", vertical="center", indent=1
-    )
-    value_cell.fill = fill(GREY_BG)
-    ws.merge_cells(
-        start_row=row + 1, start_column=col, end_row=row + 1, end_column=col + 2
-    )
+    last_col = get_column_letter(len(columns))
+    table = Table(displayName="tblVisitorLong", ref=f"A1:{last_col}4")
+    table.tableStyleInfo = TableStyleInfo(name="TableStyleMedium2", showRowStripes=True)
+    ws.add_table(table)
 
-    sub_cell = ws.cell(row=row + 2, column=col, value=sub_formula or "")
-    sub_cell.font = HELP_TEXT_FONT
-    sub_cell.alignment = Alignment(
-        horizontal="left", vertical="top", indent=1
-    )
-    sub_cell.fill = fill(GREY_BG)
-    ws.merge_cells(
-        start_row=row + 2, start_column=col, end_row=row + 2, end_column=col + 2
-    )
+    for idx, col_name in enumerate(columns, start=1):
+        ws.column_dimensions[get_column_letter(idx)].width = max(14, min(50, len(col_name) + 4))
 
-    ws.row_dimensions[row].height = 16
-    ws.row_dimensions[row + 1].height = 30
-    ws.row_dimensions[row + 2].height = 16
+    ws.row_dimensions[1].height = 28
+    ws.freeze_panes = "A2"
+    ws.sheet_state = "hidden"
+    return ws
 
 
 def build_dashboard_sheet(ws):
-    # Hide gridlines
     ws.sheet_view.showGridLines = False
-
-    # Column widths — 8 columns wide layout
     for c in range(1, 13):
         ws.column_dimensions[get_column_letter(c)].width = 16
 
-    # Title row
+    # Title
     ws["A1"] = "Student Engagement Dashboard"
     ws["A1"].font = TITLE_FONT
     ws.merge_cells("A1:H1")
     ws.row_dimensions[1].height = 32
 
     ws["A2"] = (
-        "Sums every submission in tblVisitor / tblOutreach. "
-        "Add a date timeline + slicers later for interactive filtering."
+        "Lifetime KPIs and heatmap. Slicers/timeline filter the Reports — Weekly / Monthly sheets."
     )
     ws["A2"].font = HELP_TEXT_FONT
     ws.merge_cells("A2:H2")
     ws.row_dimensions[2].height = 18
 
-    # ----- KPI tiles (rows 4-6) -----
+    # KPI tiles
     add_section_header(ws, 3, "  KEY METRICS")
 
     kpi_tile(
         ws, 4, 1,
         "PEOPLE HELPED (VISITOR)",
-        "=IFERROR(SUM(tblVisitor[How many helped]),0)",
-        "=IF(ROWS(tblVisitor[Submission ID])=0,\"No data yet\",ROWS(tblVisitor[Submission ID])&\" submissions\")",
+        f"=IFERROR(SUM(tblVisitor[{HEADCOUNT_COL}]),0)",
+        "=IFERROR(ROWS(tblVisitor[Id])&\" submissions\",\"No data yet\")",
     )
     kpi_tile(
         ws, 4, 4,
         "INQUIRIES LOGGED",
-        "=" + "+".join(
-            f"IFERROR(SUM(tblVisitor[{c}]),0)" for c in CATEGORIES
-        ),
-        "Sum across all 24 categories",
+        "=IFERROR(SUM(tblVisitorLong[Count]),0)",
+        "Sum across all categories (auto-includes new ones)",
     )
     kpi_tile(
         ws, 4, 7,
         "TOP CAMPUS BY HEADCOUNT",
-        (
-            "=IFERROR(INDEX(_Helpers!A4:A7,"
-            "MATCH(MAX(_Helpers!B4:B7),_Helpers!B4:B7,0))"
-            ",\"—\")"
-        ),
-        "=IFERROR(MAX(_Helpers!B4:B7)&\" people helped\",\"No data\")",
+        "=IFERROR(INDEX(_Helpers!A4:A7,MATCH(MAX(_Helpers!B4:B7),_Helpers!B4:B7,0)),\"—\")",
+        "=IFERROR(MAX(_Helpers!B4:B7)&\" people helped\",\"\")",
     )
     kpi_tile(
         ws, 4, 10,
         "PEOPLE HELPED (OUTREACH)",
-        "=IFERROR(SUM(tblOutreach[How many helped]),0)",
-        "=IFERROR(ROWS(tblOutreach[Submission ID])&\" outreach entries\",\"\")",
+        f"=IFERROR(SUM(tblOutreach[{OUTREACH_HEADCOUNT_COL}]),0)",
+        "=IFERROR(ROWS(tblOutreach[Id])&\" outreach entries\",\"\")",
     )
 
-    # ----- Heatmap section (rows 8-13) -----
+    # Heatmap
     add_section_header(ws, 7, "  ENGAGEMENT HEATMAP — CAMPUS × TIME BLOCK")
 
-    # Column headers (time blocks)
     ws.cell(row=8, column=1, value="Campus").font = HEADER_FONT
     ws.cell(row=8, column=1).fill = HEADER_FILL
-    ws.cell(row=8, column=1).alignment = Alignment(
-        horizontal="center", vertical="center"
-    )
-    for i, tb in enumerate(["Morning", "Afternoon", "Evening"]):
-        c = ws.cell(row=8, column=2 + i, value=tb)
+    ws.cell(row=8, column=1).alignment = Alignment(horizontal="center", vertical="center")
+    for i, label in enumerate(["Morning", "Afternoon", "Evening"]):
+        c = ws.cell(row=8, column=2 + i, value=label)
         c.font = HEADER_FONT
         c.fill = HEADER_FILL
         c.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Row headers (campuses) and SUMIFS cells
     for r, campus in enumerate(CAMPUSES):
-        rrow = 9 + r
-        c = ws.cell(row=rrow, column=1, value=campus)
+        rr = 9 + r
+        c = ws.cell(row=rr, column=1, value=campus)
         c.font = Font(name="Calibri", size=11, bold=True, color=TEXT)
         c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
         c.fill = fill(GREY_BG)
 
-        for ti, tb_label in enumerate(TIME_BLOCKS):
-            cell = ws.cell(row=rrow, column=2 + ti)
+        for ti, prefix in enumerate(TIME_BLOCK_PREFIXES):
+            cell = ws.cell(row=rr, column=2 + ti)
+            # Wildcard match — resilient to en-dash vs hyphen, parens variations
             cell.value = (
-                f"=IFERROR(SUMIFS(tblVisitor[How many helped],"
+                f"=IFERROR(SUMIFS(tblVisitor[{HEADCOUNT_COL}],"
                 f"tblVisitor[Campus],\"{campus}\","
-                f"tblVisitor[Time block],\"{tb_label}\"),0)"
+                f"tblVisitor[{TIME_BLOCK_COL}],\"{prefix}*\"),0)"
             )
-            cell.alignment = Alignment(
-                horizontal="center", vertical="center"
-            )
+            cell.alignment = Alignment(horizontal="center", vertical="center")
             cell.font = Font(name="Calibri", size=12, bold=True, color=TEXT)
             cell.border = border()
-        ws.row_dimensions[rrow].height = 28
+        ws.row_dimensions[rr].height = 28
 
-    # Conditional formatting on the heatmap data cells
     rule = ColorScaleRule(
         start_type="num", start_value=0, start_color=WHITE,
         mid_type="percentile", mid_value=50, mid_color=TEAL_MID,
@@ -359,97 +355,30 @@ def build_dashboard_sheet(ws):
     )
     ws.conditional_formatting.add("B9:D12", rule)
 
-    # ----- Top categories chart (rows 15-30, columns A-D) -----
-    add_section_header(ws, 14, "  TOP INQUIRY CATEGORIES")
-    ws.cell(row=15, column=1, value="Chart sourced from _Helpers!H column. Sort the helper rows by count desc to manually rank the bars.").font = HELP_TEXT_FONT
-    ws.merge_cells("A15:H15")
+    # Section dividers — actual chart objects get added by post-build.py.
+    add_section_header(ws, 14, "  TOP INQUIRY CATEGORIES — auto-populated from tblVisitorLong")
+    add_section_header(ws, 30, "  OUTREACH THEMES — PEOPLE HELPED")
+    add_section_header(ws, 46, "  OUTREACH REACH BY CAMPUS")
 
-    chart = BarChart()
-    chart.type = "bar"  # horizontal
-    chart.style = 2
-    chart.title = None
-    chart.y_axis.title = None
-    chart.x_axis.title = None
-    chart.legend = None
-    chart.height = 12
-    chart.width = 18
-
-    cat_ref = Reference(
-        ws.parent["_Helpers"], min_col=7, min_row=4, max_row=27
-    )
-    val_ref = Reference(
-        ws.parent["_Helpers"], min_col=8, min_row=3, max_row=27
-    )
-    chart.add_data(val_ref, titles_from_data=True)
-    chart.set_categories(cat_ref)
-    ws.add_chart(chart, "A16")
-
-    # ----- Outreach themes chart (rows 32-46) -----
-    add_section_header(ws, 31, "  OUTREACH THEMES — PEOPLE HELPED")
-
-    chart2 = BarChart()
-    chart2.type = "bar"
-    chart2.style = 2
-    chart2.title = None
-    chart2.legend = None
-    chart2.height = 11
-    chart2.width = 18
-
-    theme_cat_ref = Reference(
-        ws.parent["_Helpers"], min_col=10, min_row=4,
-        max_row=3 + len(OUTREACH_THEMES),
-    )
-    theme_val_ref = Reference(
-        ws.parent["_Helpers"], min_col=11, min_row=3,
-        max_row=3 + len(OUTREACH_THEMES),
-    )
-    chart2.add_data(theme_val_ref, titles_from_data=True)
-    chart2.set_categories(theme_cat_ref)
-    ws.add_chart(chart2, "A32")
-
-    # ----- Outreach by campus chart (rows 48-58) -----
-    add_section_header(ws, 47, "  OUTREACH REACH BY CAMPUS")
-
-    chart3 = BarChart()
-    chart3.type = "col"
-    chart3.style = 2
-    chart3.title = None
-    chart3.legend = None
-    chart3.height = 8
-    chart3.width = 18
-
-    oc_cat_ref = Reference(
-        ws.parent["_Helpers"], min_col=13, min_row=4, max_row=7
-    )
-    oc_val_ref = Reference(
-        ws.parent["_Helpers"], min_col=14, min_row=3, max_row=7
-    )
-    chart3.add_data(oc_val_ref, titles_from_data=True)
-    chart3.set_categories(oc_cat_ref)
-    ws.add_chart(chart3, "A48")
-
-    # ----- Footer note -----
-    add_section_header(ws, 60, "  WHAT'S MISSING — ADD MANUALLY IN EXCEL")
-    ws.cell(row=61, column=1, value="The starter pre-builds: data tables, KPI tiles, heatmap, and 3 charts.").font = BODY_FONT
-    ws.cell(row=62, column=1, value=(
-        "Add manually for full interactivity: 1) Power Query connection to your Forms response files "
-        "(Data → Get Data → From File → From Workbook). 2) Slicers on Campus/Time block "
-        "(Insert → Slicer, after creating any pivot table). 3) Date Timeline (Insert → Timeline). "
-        "See excel-dashboard-build-guide.md for the rest."
-    )).font = HELP_TEXT_FONT
-    ws.cell(row=62, column=1).alignment = Alignment(wrap_text=True, vertical="top")
-    ws.merge_cells("A62:H64")
-    ws.row_dimensions[62].height = 60
+    # Footer help
+    add_section_header(ws, 62, "  WHAT'S NEXT")
+    note = ws.cell(row=63, column=1, value=(
+        "1) Connect Power Query (3 queries: Visitor, VisitorLong, Outreach). "
+        "2) Run scripts/post-build.py to add slicers + report pivots + charts. "
+        "3) Add a Timeline manually after data flows in. See excel-dashboard-build-guide.md."
+    ))
+    note.font = HELP_TEXT_FONT
+    note.alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells("A63:H65")
+    ws.row_dimensions[63].height = 60
 
     return ws
 
 
 def build_helpers_sheet(ws):
-    """Hidden helper sheet with computed values that drive the charts."""
     ws.sheet_state = "hidden"
     ws.sheet_view.showGridLines = False
 
-    # ----- Section 1: Campus totals (drives "Top campus" KPI) -----
     ws["A1"] = "CAMPUS TOTALS"
     ws["A1"].font = Font(bold=True, color=TEAL_DARK)
     ws.merge_cells("A1:B1")
@@ -463,96 +392,15 @@ def build_helpers_sheet(ws):
     for i, campus in enumerate(CAMPUSES):
         ws.cell(row=4 + i, column=1, value=campus)
         ws.cell(
-            row=4 + i,
-            column=2,
+            row=4 + i, column=2,
             value=(
-                f"=IFERROR(SUMIFS(tblVisitor[How many helped],"
+                f"=IFERROR(SUMIFS(tblVisitor[{HEADCOUNT_COL}],"
                 f"tblVisitor[Campus],\"{campus}\"),0)"
             ),
         )
 
-    # ----- Section 2: Daily totals placeholder (drives daily trend) -----
-    ws["D1"] = "DAILY TOTALS (helper)"
-    ws["D1"].font = Font(bold=True, color=TEAL_DARK)
-    ws.merge_cells("D1:E1")
-    ws["D3"] = "Date"
-    ws["E3"] = "People helped"
-    ws["D3"].font = HEADER_FONT
-    ws["E3"].font = HEADER_FONT
-    ws["D3"].fill = HEADER_FILL
-    ws["E3"].fill = HEADER_FILL
-    ws["D4"] = "(Build a PivotChart on tblVisitor for the daily trend — too dynamic for a static helper.)"
-    ws["D4"].font = HELP_TEXT_FONT
-    ws.merge_cells("D4:E10")
-
-    # ----- Section 3: Category totals (drives Top Categories chart) -----
-    ws["G1"] = "CATEGORY TOTALS"
-    ws["G1"].font = Font(bold=True, color=TEAL_DARK)
-    ws.merge_cells("G1:H1")
-    ws["G3"] = "Category"
-    ws["H3"] = "Total inquiries"
-    ws["G3"].font = HEADER_FONT
-    ws["H3"].font = HEADER_FONT
-    ws["G3"].fill = HEADER_FILL
-    ws["H3"].fill = HEADER_FILL
-
-    for i, cat in enumerate(CATEGORIES):
-        ws.cell(row=4 + i, column=7, value=cat)
-        ws.cell(
-            row=4 + i,
-            column=8,
-            value=f"=IFERROR(SUM(tblVisitor[{cat}]),0)",
-        )
-
-    # ----- Section 4: Outreach theme totals -----
-    ws["J1"] = "OUTREACH THEME TOTALS"
-    ws["J1"].font = Font(bold=True, color=TEAL_DARK)
-    ws.merge_cells("J1:K1")
-    ws["J3"] = "Theme"
-    ws["K3"] = "People helped"
-    ws["J3"].font = HEADER_FONT
-    ws["K3"].font = HEADER_FONT
-    ws["J3"].fill = HEADER_FILL
-    ws["K3"].fill = HEADER_FILL
-
-    for i, theme in enumerate(OUTREACH_THEMES):
-        ws.cell(row=4 + i, column=10, value=theme)
-        ws.cell(
-            row=4 + i,
-            column=11,
-            value=(
-                f"=IFERROR(SUMIFS(tblOutreach[How many helped],"
-                f"tblOutreach[Outreach Activity],\"{theme}\"),0)"
-            ),
-        )
-
-    # ----- Section 5: Outreach by campus -----
-    ws["M1"] = "OUTREACH BY CAMPUS"
-    ws["M1"].font = Font(bold=True, color=TEAL_DARK)
-    ws.merge_cells("M1:N1")
-    ws["M3"] = "Campus"
-    ws["N3"] = "People helped"
-    ws["M3"].font = HEADER_FONT
-    ws["N3"].font = HEADER_FONT
-    ws["M3"].fill = HEADER_FILL
-    ws["N3"].fill = HEADER_FILL
-
-    for i, campus in enumerate(CAMPUSES):
-        ws.cell(row=4 + i, column=13, value=campus)
-        ws.cell(
-            row=4 + i,
-            column=14,
-            value=(
-                f"=IFERROR(SUMIFS(tblOutreach[How many helped],"
-                f"tblOutreach[Campus],\"{campus}\"),0)"
-            ),
-        )
-
-    # Column widths
-    for c in [1, 4, 7, 10, 13]:
-        ws.column_dimensions[get_column_letter(c)].width = 36
-    for c in [2, 5, 8, 11, 14]:
-        ws.column_dimensions[get_column_letter(c)].width = 16
+    for c in (1, 2):
+        ws.column_dimensions[get_column_letter(c)].width = 24
 
     return ws
 
@@ -563,41 +411,35 @@ def build_how_to_use_sheet(ws):
     ws.column_dimensions["B"].width = 100
 
     rows = [
-        ("How to use this workbook", "title"),
+        ("How to use this workbook (v2 — long-format)", "title"),
         ("", "blank"),
-        ("This is the Option A+ starter — it's pre-built with the data tables, KPI tiles, heatmap, and three charts. You need to do two things to make it live: connect Power Query to your Forms response files, and (optionally) add slicers / a timeline for interactive filtering.", "body"),
+        ("This template is built around the actual Microsoft Forms export shape, with category data unpivoted into a long-format table so adding a new question in Forms doesn't break anything.", "body"),
         ("", "blank"),
-        ("Sheet by sheet", "h2"),
-        ("• Dashboard — Shannon's main view. KPI tiles, Campus × Time block heatmap, top categories chart, outreach themes chart, outreach by campus chart. All sourced from formulas — no pivots needed.", "body"),
-        ("• Visitor — empty data table with all 32 columns matching the Forms export. Power Query will load Forms responses here.", "body"),
-        ("• Outreach — empty data table with 10 columns. Same as above, for outreach.", "body"),
-        ("• _Helpers — hidden sheet with the small helper tables that drive the charts. Don't delete.", "body"),
+        ("Sheets", "h2"),
+        ("• Dashboard — Shannon's main view. KPI tiles, heatmap, slicers, charts.", "body"),
+        ("• Visitor — wide table tblVisitor (one row per submission). Columns match Forms export exactly.", "body"),
+        ("• Outreach — wide table tblOutreach. Same.", "body"),
+        ("• Reports — Weekly / Monthly — pre-built pivots grouped by date. Filtered by the Dashboard slicers.", "body"),
+        ("• VisitorLong (hidden) — long-format table tblVisitorLong with one row per (submission × category). Auto-handles new categories.", "body"),
+        ("• _Helpers (hidden) — small helper formulas the Top Campus KPI uses.", "body"),
+        ("• _PivotHost (hidden, added by post-build) — owns the slicer-source pivot.", "body"),
         ("", "blank"),
-        ("Step 1 — Connect Power Query (one-time, ~10 min)", "h2"),
-        ("Open each form in forms.office.com → Responses → Open in Excel. Microsoft creates an auto-syncing workbook in your OneDrive. Save those files in OneDrive/Student Engagement/Live Data/.", "body"),
-        ("Then in this workbook: Data → Get Data → From File → From Workbook → pick the Visitor responses file → Sheet1 → Transform Data. Replace nulls with 0 in the 24 category columns. Close & Load To... → Existing worksheet → cell A1 of the Visitor sheet.", "body"),
-        ("Repeat for the Outreach responses file → load into the Outreach sheet.", "body"),
-        ("Data → Queries & Connections → right-click each query → Properties → tick 'Refresh data when opening the file' AND 'Refresh every 5 minutes'.", "body"),
-        ("That's it. The dashboard now updates within a minute of every new submission.", "body"),
+        ("Power Query setup — three queries", "h2"),
+        ("On first use, after saving this template into OneDrive:", "body"),
+        ("(1) Visitor query — Data → Get Data → From File → From Workbook → pick your Visitor responses .xlsx → Sheet1 → Close & Load To... → Existing worksheet → A1 of Visitor sheet → click Replace when Excel asks → table named tblVisitor.", "body"),
+        ("(2) Outreach query — same as Visitor, but pick your Outreach responses .xlsx and load to A1 of Outreach sheet → table named tblOutreach.", "body"),
+        ("(3) VisitorLong query — Right-click the Visitor query in the Queries & Connections panel → Reference. New query opens. Rename to VisitorLong. Select the 24 category columns (Wayfinding through Others; NOT Others (Inquiry)). Right-click selected → Unpivot Columns. Rename Attribute → Category and Value → Count. Close & Load To... → Existing worksheet → A1 of VisitorLong sheet (it's hidden — unhide briefly via right-click any tab → Unhide → VisitorLong). Replace tblVisitorLong when prompted. Re-hide.", "body"),
+        ("(4) Set all 3 queries to refresh on open + every 5 minutes: Data → Queries & Connections → right-click each query → Properties → tick both checkboxes.", "body"),
         ("", "blank"),
-        ("Step 2 — Optional polish", "h2"),
-        ("Add slicers and a timeline for interactive filtering: Insert a PivotTable on tblVisitor (any pivot, even a hidden one), then Insert → Slicer (tick Campus, Time block) and Insert → Timeline (tick Submitted at). Connect the slicers to all charts via Slicer → Report Connections. The dashboard becomes click-to-filter.", "body"),
-        ("Add a daily trend line chart: Insert PivotChart on tblVisitor → Date axis = Submitted at (grouped by days), value = Sum of How many helped. Drop the chart on the Dashboard sheet.", "body"),
-        ("Add a section-mix stacked bar: same idea, with Campus on the row axis and a custom Section-bucket column on the column axis.", "body"),
-        ("", "blank"),
-        ("Daily refresh", "h2"),
-        ("• Open the file. Data refreshes automatically within ~30 seconds.", "body"),
-        ("• If you want to force a refresh: Data → Refresh All (or Ctrl+Alt+F5).", "body"),
+        ("Why this is future-proof", "h2"),
+        ("• Adding a new category in Forms (e.g., 'Voter Registration'): Power Query loads it as a new column on tblVisitor. The next refresh of the VisitorLong query auto-includes it via Unpivot Columns. The Top Categories chart and Inquiries Logged KPI both pull from tblVisitorLong, so the new category appears with zero formula edits.", "body"),
+        ("• Renaming a question in Forms: Power Query throws on next refresh because it expects the old column name. Edit the query → 'Renamed Columns' step → update the mapping. ~30 seconds.", "body"),
+        ("• Adding a new campus: appears automatically in slicers and pivots. Update the helper table on _Helpers (rows 4-7) for the Top Campus KPI.", "body"),
         ("", "blank"),
         ("If something looks broken", "h2"),
-        ("• KPI shows #REF! → the table reference is broken. Click the cell to see which table/column it's looking for. Most likely the table got renamed; restore tblVisitor / tblOutreach as the table names (Table Design tab).", "body"),
-        ("• KPI shows 0 when you expect numbers → check Data → Queries & Connections; the Forms responses file may have moved. Edit the query → fix the source path.", "body"),
-        ("• Heatmap is all empty → the Time block question wording must match TIME_BLOCKS exactly: 'Morning (open – 12pm)', 'Afternoon (12 – 4pm)', 'Evening (4pm – close)'. Em-dashes matter; check carefully.", "body"),
-        ("", "blank"),
-        ("Maintenance", "h2"),
-        ("• Adding a category in Forms → after the next submission, the new column appears in the Forms export. Power Query refresh picks it up. To include it in the 'Inquiries logged' KPI, edit that formula on the Dashboard sheet.", "body"),
-        ("• Renaming a Forms question → Power Query will throw on next refresh because it expects the old column name. Edit the query → 'Renamed Columns' step → update the mapping.", "body"),
-        ("• Adding a new campus → update the helper table on _Helpers (rows 4-7) and the heatmap rows on the Dashboard.", "body"),
+        ("• KPI shows #REF! → a column reference is broken. Click the cell to see which column it's looking for, then check that column exists in your data with that exact name.", "body"),
+        ("• Heatmap is all zeros even with data → the Time block question wording must START with 'Morning' / 'Afternoon' / 'Evening'. Heatmap formulas use wildcard matching to be resilient, but if your Time block options start with different words, update the heatmap formulas on Dashboard rows 9-12.", "body"),
+        ("• Slicers don't filter the Top Categories or Outreach charts → expected. Those charts source from different tables (tblVisitorLong, tblOutreach), so they always show lifetime totals. The slicers/timeline filter only the heatmap-source pivot and the Reports sheets.", "body"),
     ]
 
     style_map = {
@@ -617,7 +459,7 @@ def build_how_to_use_sheet(ws):
         elif kind == "h2":
             ws.row_dimensions[i + 1].height = 22
         elif kind == "body":
-            ws.row_dimensions[i + 1].height = max(20, 16 + len(text) // 80 * 12)
+            ws.row_dimensions[i + 1].height = max(20, 16 + len(text) // 80 * 14)
 
     return ws
 
@@ -632,16 +474,13 @@ def build_reports_sheet(ws, title, group_hint):
     ws.row_dimensions[1].height = 30
 
     ws["B3"] = (
-        "This sheet is a placeholder for the rolled-up report. "
-        "To build it: Insert a PivotTable on tblVisitor → Rows: Submitted at "
-        f"(right-click → Group → {group_hint}), Campus → Values: Sum of How many helped. "
-        "Drop slicers for Campus and Time block. Print Layout → Landscape, Page Setup "
-        "→ Print Area = the pivot range. Page → File → Export → PDF."
+        "PivotTable below is built by post-build.py. "
+        f"After data loads, right-click any date → Group → tick {group_hint} for proper rollup."
     )
     ws["B3"].font = HELP_TEXT_FONT
     ws["B3"].alignment = Alignment(wrap_text=True, vertical="top")
-    ws.merge_cells("B3:H8")
-    ws.row_dimensions[3].height = 90
+    ws.merge_cells("B3:H7")
+    ws.row_dimensions[3].height = 70
     return ws
 
 
@@ -654,22 +493,25 @@ def main():
     dashboard = wb.create_sheet("Dashboard")
     visitor = wb.create_sheet("Visitor")
     outreach = wb.create_sheet("Outreach")
+    visitor_long = wb.create_sheet("VisitorLong")
     weekly = wb.create_sheet("Reports — Weekly")
     monthly = wb.create_sheet("Reports — Monthly")
     helpers = wb.create_sheet("_Helpers")
 
-    build_data_sheet(visitor, VISITOR_COLS, "tblVisitor")
-    build_data_sheet(outreach, OUTREACH_COLS, "tblOutreach")
+    visitor_dates = ("Start time", "Completion time")
+    outreach_dates = ("Start time", "Completion time", OUTREACH_DATE_COL)
+
+    build_data_sheet(visitor, VISITOR_COLS, "tblVisitor", visitor_dates)
+    build_data_sheet(outreach, OUTREACH_COLS, "tblOutreach", outreach_dates)
+    build_visitor_long_sheet(visitor_long)
     build_helpers_sheet(helpers)
     build_dashboard_sheet(dashboard)
     build_how_to_use_sheet(how_to_use)
-    build_reports_sheet(weekly, "Weekly Report", "Days × 7 + Months + Years")
+    build_reports_sheet(weekly, "Weekly Report", "Days (7) + Months + Years")
     build_reports_sheet(monthly, "Monthly Report", "Months + Years")
 
-    # Set the workbook to open on the How to use sheet
     wb.active = wb.sheetnames.index("How to use")
 
-    # Output
     repo_root = Path(__file__).resolve().parent.parent
     out_path = repo_root / "templates" / "student-engagement-dashboard-starter.xlsx"
     out_path.parent.mkdir(parents=True, exist_ok=True)
