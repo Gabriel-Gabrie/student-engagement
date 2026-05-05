@@ -12,40 +12,42 @@ const TIME_BLOCKS = [
 ];
 
 const VISITOR_SECTIONS = [
-  { title: 'Library', items: [
-    { key: 'library_academic_integrity', label: 'Library – Academic Integrity' },
-    { key: 'library_tech_loans',         label: 'Library – Tech Loans / TeachMeTech' },
-    { key: 'library_research_writing',   label: 'Library – Research / Writing Consultants' },
+  { title: 'Common Help', items: [
+    { key: 'wayfinding',                 label: 'Wayfinding – General' },
+    { key: 'onecard',                    label: 'OneCard' },
+    { key: 'it_support',                 label: 'IT Support' },
+    { key: 'bus_pass',                   label: 'Bus Pass / Transportation' },
+    { key: 'parking',                    label: 'Parking' },
+    { key: 'timetable_registration',     label: 'Timetable / Registration Concern' },
+  ]},
+  { title: 'Academic & Registration', items: [
+    { key: 'student_fees',               label: 'Student Fees / Student Financial Services' },
+    { key: 'learning_services',          label: 'Learning Services / Math Help / Tutors' },
+    { key: 'change_program',             label: 'Want to Change Program' },
+    { key: 'connect_faculty',            label: 'Connect with Faculty / Program Coordinator / Chair' },
+  ]},
+  { title: 'Health & Wellness', items: [
+    { key: 'health_insurance',           label: 'Health Insurance' },
+    { key: 'mental_health',              label: 'Mental Health Support / Counselling' },
+    { key: 'medical_clinic',             label: 'Medical Clinic / Medical Care' },
+  ]},
+  { title: 'Housing & Career', items: [
+    { key: 'housing',                    label: 'Housing / Accommodation' },
+    { key: 'job_search',                 label: 'Job Search / Career Services' },
   ]},
   { title: 'International', items: [
     { key: 'immigration_advising',       label: 'Immigration / International Student Advising Referral' },
     { key: 'intl_transition',            label: 'International Transition Services' },
     { key: 'intl_admissions_second',     label: 'International Admissions – Second Program' },
   ]},
-  { title: 'Academic & Registration', items: [
-    { key: 'learning_services',          label: 'Learning Services / Math Help / Tutors' },
-    { key: 'timetable_registration',     label: 'Timetable / Registration Concern' },
-    { key: 'change_program',             label: 'Want to Change Program' },
-    { key: 'connect_faculty',            label: 'Connect with Faculty / Program Coordinator / Chair' },
-    { key: 'student_fees',               label: 'Student Fees / Student Financial Services' },
-  ]},
-  { title: 'Health & Wellness', items: [
-    { key: 'health_insurance',           label: 'Health Insurance' },
-    { key: 'medical_clinic',             label: 'Medical Clinic / Medical Care' },
-    { key: 'mental_health',              label: 'Mental Health Support / Counselling' },
-  ]},
-  { title: 'Campus Services', items: [
-    { key: 'bus_pass',                   label: 'Bus Pass / Transportation' },
-    { key: 'onecard',                    label: 'OneCard' },
-    { key: 'parking',                    label: 'Parking' },
-    { key: 'it_support',                 label: 'IT Support' },
-    { key: 'job_search',                 label: 'Job Search / Career Services' },
-    { key: 'housing',                    label: 'Housing / Accommodation' },
+  { title: 'Library', items: [
+    { key: 'library_tech_loans',         label: 'Library – Tech Loans / TeachMeTech' },
+    { key: 'library_research_writing',   label: 'Library – Research / Writing Consultants' },
+    { key: 'library_academic_integrity', label: 'Library – Academic Integrity' },
   ]},
   { title: 'CSI & Other', items: [
     { key: 'csi_frosh_kits',             label: 'CSI – Frosh Kits' },
     { key: 'csi_peer_advocates',         label: 'CSI – Peer Advocates' },
-    { key: 'wayfinding',                 label: 'Wayfinding – General' },
     { key: 'others_count',               label: 'Others' },
   ]},
 ];

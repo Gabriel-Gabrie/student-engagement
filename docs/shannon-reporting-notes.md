@@ -2,13 +2,23 @@
 
 What changes in your Excel workflow after Option A goes live.
 
+The two forms have been renamed:
+- **Student Engagement - Visitor Tracking** (was "Visitor Tracking - All Campuses - Current")
+- **Student Engagement - Outreach Tracking** (was "Student Ambassador Outreach Tracking")
+
 ---
 
 ## What stays the same
 
 - Both forms still export to Excel from the Forms "Open in Excel" / "Get a link to view results in Excel" flow.
-- Existing inquiry category column order is preserved on the Visitor form.
 - Your per-campus and per-category totals still come from `SUM` of the corresponding column.
+- The auto-captured **Name** and **Email** columns from "Record name" are unchanged.
+
+## What changes that may break existing pivots
+
+**Inquiry category column order is different.** The 24 categories are now grouped into 7 sections (most-frequent first), so the columns appear in a new order in the Excel export. If your pivots reference categories by **column letter** (e.g., `=SUM(M2:M500)`), they will break. Pivots referencing categories by **column header name** (e.g., a pivot table built from a structured table) will continue to work.
+
+Before launching: open one of your existing pivot files, switch the data source range to the new Excel link, and verify totals match expectations on the test responses.
 
 ## What changes
 

@@ -6,7 +6,7 @@ Print this page and keep it at the desk.
 
 ## When to submit
 
-**Visitor Tracking form:** at the end of every time block, or every hour if it's busy.
+**Student Engagement - Visitor Tracking:** at the end of every time block, or every hour if it's busy.
 
 | Time block | Window |
 |---|---|
@@ -14,7 +14,7 @@ Print this page and keep it at the desk.
 | Afternoon | 12pm – 4pm |
 | Evening | 4pm – close |
 
-**Outreach Tracking form:** once per outreach activity worked. For multi-day events, submit one entry **per day**.
+**Student Engagement - Outreach Tracking:** once per outreach activity worked. For multi-day events, submit one entry **per day**.
 
 ---
 
@@ -27,46 +27,50 @@ You're already identified by your `@conestogac.on.ca` login — there's no name 
 3. The "How many people did you help" number at the top is the headcount of *people*. The category numbers below are the count of *inquiries*. One person can have multiple inquiries — that is fine and expected.
 4. If something came up that doesn't fit any category, count it under **Others** and describe it in **Others (Inquiry)**.
 
+The form is grouped into 7 sections. The first section ("Common Help") covers the most frequent inquiries — most quiet shifts won't need to scroll past it.
+
 ---
 
 ## Category quick reference
 
 > **Note:** these definitions are a starting point — Shannon will refine them. If you're unsure, count it under Others and describe it.
 
-### Library
-- **Academic Integrity** — plagiarism, citation, AI use rules, academic misconduct questions.
-- **Tech Loans / TeachMeTech** — borrowing laptops, cameras, equipment, or booking a TeachMeTech session.
-- **Research / Writing Consultants** — booking or asking about a research or writing consultation.
+### Common Help *(Section 1 — most frequent)*
+- **Wayfinding – General** — "Where is room X?" / "How do I get to Y building?"
+- **OneCard** — getting, replacing, or topping up the student card.
+- **IT Support** — login issues, eConestoga, MyConestoga, email, Wi-Fi, software.
+- **Bus Pass / Transportation** — U-Pass, GRT, transit info, parking shuttle.
+- **Parking** — permits, lot info, tickets.
+- **Timetable / Registration Concern** — schedule conflicts, registration errors, add/drop questions.
+
+### Academic & Registration
+- **Student Fees / Financial Services** — tuition, fees, payment plans, OSAP, bursaries, refunds.
+- **Learning Services / Math Help / Tutors** — booking a tutor, math help, learning skills, accessibility/accommodations.
+- **Want to Change Program** — student wants to switch into a different program.
+- **Connect with Faculty / Coordinator / Chair** — student wants to reach a specific instructor or program lead.
+
+### Health & Wellness
+- **Health Insurance** — domestic or international student health/dental plan questions, opt-outs, claims.
+- **Mental Health Support / Counselling** — booking counselling, crisis support, peer mental health, wellness referrals.
+- **Medical Clinic / Medical Care** — booking the on-campus clinic, finding a doctor, medical questions.
+
+### Housing & Career
+- **Housing / Accommodation** — on- or off-campus housing search, residence, roommate help.
+- **Job Search / Career Services** — co-op, resume help, job postings, career advising referrals.
 
 ### International
 - **Immigration / IS Advising Referral** — study permits, work permits, PGWP, visa questions, referrals to International Student Advising.
 - **International Transition Services** — onboarding, orientation, or transition support for newly-arrived international students.
 - **International Admissions – Second Program** — current international students applying to a second/different Conestoga program.
 
-### Academic & Registration
-- **Learning Services / Math Help / Tutors** — booking a tutor, math help, learning skills, accessibility/accommodations.
-- **Timetable / Registration Concern** — schedule conflicts, registration errors, add/drop questions.
-- **Want to Change Program** — student wants to switch into a different program.
-- **Connect with Faculty / Coordinator / Chair** — student wants to reach a specific instructor or program lead.
-- **Student Fees / Financial Services** — tuition, fees, payment plans, OSAP, bursaries, refunds.
-
-### Health & Wellness
-- **Health Insurance** — domestic or international student health/dental plan questions, opt-outs, claims.
-- **Medical Clinic / Medical Care** — booking the on-campus clinic, finding a doctor, medical questions.
-- **Mental Health Support / Counselling** — booking counselling, crisis support, peer mental health, wellness referrals.
-
-### Campus Services
-- **Bus Pass / Transportation** — U-Pass, GRT, transit info, parking shuttle.
-- **OneCard** — getting, replacing, or topping up the student card.
-- **Parking** — permits, lot info, tickets.
-- **IT Support** — login issues, eConestoga, MyConestoga, email, Wi-Fi, software.
-- **Job Search / Career Services** — co-op, resume help, job postings, career advising referrals.
-- **Housing / Accommodation** — on- or off-campus housing search, residence, roommate help.
+### Library
+- **Tech Loans / TeachMeTech** — borrowing laptops, cameras, equipment, or booking a TeachMeTech session.
+- **Research / Writing Consultants** — booking or asking about a research or writing consultation.
+- **Academic Integrity** — plagiarism, citation, AI use rules, academic misconduct questions.
 
 ### CSI & Other
 - **CSI – Frosh Kits** — picking up or asking about Frosh Kits.
 - **CSI – Peer Advocates** — connecting with a CSI Peer Advocate (advocacy, complaints, conflicts).
-- **Wayfinding – General** — "Where is room X?" / "How do I get to Y building?"
 - **Others** — anything that doesn't fit above. Describe it in **Others (Inquiry)**.
 
 ---
