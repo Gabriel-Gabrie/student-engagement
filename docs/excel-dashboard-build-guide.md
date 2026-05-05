@@ -1,6 +1,6 @@
 # Excel Dashboard Build Guide — Option A+
 
-The dashboard ships pre-built. Open the template, do **two** things, and you have a live dashboard. Optionally add slicers later for interactive filtering.
+The dashboard ships pre-built. Open the template, do **two** things, and you have a live dashboard with slicers and report pivots ready to go.
 
 ---
 
@@ -11,24 +11,27 @@ The dashboard ships pre-built. Open the template, do **two** things, and you hav
 | Sheet | What's in it |
 |---|---|
 | `How to use` | One-page reference for Shannon — opens by default |
-| `Dashboard` | KPIs, heatmap, top-categories chart, outreach-themes chart, outreach-by-campus chart — all pre-formulated |
-| `Visitor` | Empty data table (`tblVisitor`) with all 32 column headers |
-| `Outreach` | Empty data table (`tblOutreach`) with 10 column headers |
-| `Reports — Weekly` | Placeholder; build a pivot here grouped by week |
-| `Reports — Monthly` | Placeholder; build a pivot here grouped by month |
-| `_Helpers` | Hidden — drives the charts. Don't delete. |
+| `Dashboard` | KPIs, heatmap, top-categories chart, outreach-themes chart, outreach-by-campus chart, **Campus + Time block slicers** |
+| `Visitor` | Empty data table (`tblVisitor`) with all 32 column headers — 3 placeholder rows that Power Query overwrites on first load |
+| `Outreach` | Empty data table (`tblOutreach`) with 10 column headers — same pattern |
+| `Reports — Weekly` | **Pre-built PivotTable** (`ptWeekly`): Submitted at × Campus → Sum of helped |
+| `Reports — Monthly` | **Pre-built PivotTable** (`ptMonthly`): same shape |
+| `_Helpers` | Hidden — drives the formula charts |
+| `_PivotHost` | Hidden — hosts the slicer-source pivot. Don't unhide unless you're debugging. |
 
-The KPI tiles, heatmap, and three charts are formula-driven (no pivot tables required). They show 0/blank until you connect data; once data flows in, everything refreshes automatically.
+**Already wired:** the Campus and Time block slicers on the Dashboard sheet filter all three pivots (`ptSlicerHost`, `ptWeekly`, `ptMonthly`) simultaneously. Click a chip and watch the Reports sheets update.
+
+The KPI tiles, heatmap, and three formula-driven charts are intentionally *not* slicer-controlled — they always show lifetime totals. This is the "lifetime view + filterable reports" split.
 
 ---
 
 ## Step 1 — Save the template into OneDrive (~2 min)
 
 1. Download the template from the repo.
-2. Save it to `OneDrive/Student Engagement/Dashboards/Student Engagement - Dashboard.xlsx`.
-3. Open it. You should land on the "How to use" sheet.
+2. Save to `OneDrive/Student Engagement/Dashboards/Student Engagement - Dashboard.xlsx`.
+3. Open it. You'll land on the "How to use" sheet.
 
-## Step 2 — Connect Power Query to the Forms responses (~10 min)
+## Step 2 — Connect Power Query (~10 min)
 
 For each form (Visitor, then Outreach), open the form in `forms.office.com` → **Responses** tab → **Open in Excel**. Microsoft creates an auto-syncing workbook in your OneDrive. Move both into `OneDrive/Student Engagement/Live Data/` and rename:
 - `Visitor Responses.xlsx`
@@ -41,7 +44,7 @@ Now in the dashboard workbook:
 3. In Power Query:
    - Select all 24 category columns → **Transform** → **Replace Values** → replace `null` with `0`.
    - **Home** → **Close & Load To...** → **Table** → **Existing worksheet** → cell `A1` of the **Visitor** sheet → click OK.
-   - Excel will warn that `tblVisitor` already exists — that's fine; click "Replace" / "Yes."
+   - Excel will warn that `tblVisitor` already exists — click **Replace** / **Yes**.
 
 4. Repeat for `Outreach Responses.xlsx` → load into the **Outreach** sheet (replace `tblOutreach`).
 
@@ -49,79 +52,94 @@ Now in the dashboard workbook:
    - ✅ **Refresh data when opening the file**
    - ✅ **Refresh every 5 minutes**
 
-Save. Switch to the **Dashboard** sheet. The KPIs and heatmap should now show real numbers within ~30 seconds. The charts populate too.
+6. **Data** → **Refresh All** to load the data right now.
 
-**That's it for the basic dashboard.** Anything below is optional polish.
+Save. Switch to the Dashboard. KPIs and heatmap should populate within ~30 seconds. The Reports sheets show real pivots. The slicers filter everything.
 
----
-
-## Step 3 — Optional: add interactive slicers + timeline (~10 min)
-
-Slicers and timelines require at least one PivotTable. Easiest path:
-
-1. Click the **Visitor** sheet. **Insert** → **PivotTable** → table = `tblVisitor` → New Worksheet.
-2. Drag any field into the pivot (you can hide this pivot later — its only job is to host the slicers).
-3. With the pivot selected: **PivotTable Analyze** → **Insert Slicer** → tick `Campus` and `Time block` → OK.
-4. **PivotTable Analyze** → **Insert Timeline** → tick `Submitted at` → OK.
-5. Move the slicers and timeline to the top of the Dashboard sheet.
-6. **Right-click each slicer** → **Report Connections** → tick every relevant pivot. (You'll add more pivots in Step 4 — come back here to wire them up.)
-
-The slicers don't filter the existing formula-based KPIs/charts directly — that's a known limitation of the formula-driven approach. To get full slicer-driven filtering, you need to also rebuild the dashboard's chart elements as PivotCharts (Step 4).
-
-> **Practical truth:** the formula-driven dashboard the template gives you is "always shows everything." It's still very useful — Shannon sees the lifetime totals, the heatmap is intuitive, and the charts work. Slicer-driven interactivity is a 30-min upgrade you can do later if she asks for it.
+**That's it for the working dashboard.** The optional steps below add nice-to-haves.
 
 ---
 
-## Step 4 — Optional: replace charts with PivotCharts for slicer interactivity (~30 min)
+## Step 3 — Optional: add the Timeline (1 min)
 
-Only do this if Step 3 isn't enough.
+The post-build script couldn't add the Timeline programmatically — Excel COM has a stubborn quirk with Timeline creation on near-empty pivots. Add it manually now that real data has loaded:
 
-For each existing chart on the Dashboard sheet (Top categories, Outreach themes, Outreach by campus):
-1. **Insert** → **PivotChart** → source = `tblVisitor` (or `tblOutreach` for the outreach charts).
-2. Configure rows/values per the table below.
-3. Right-click the chart → **Move Chart** → To: Dashboard.
-4. Delete the old static chart that was there.
-5. **PivotChart Analyze** → **Filter Connections** → tick the slicers and timeline from Step 3.
+1. Click into any pivot on the **Reports — Weekly** sheet.
+2. **PivotTable Analyze** → **Insert Timeline** → tick `Submitted at` → OK.
+3. Drag the timeline to the top of the **Dashboard** sheet next to the existing slicers.
+4. **Right-click the timeline** → **Report Connections** → tick `ptWeekly`, `ptMonthly`, `ptSlicerHost`.
+
+Drag the date range slider — Reports sheets refilter live.
+
+## Step 4 — Optional: replace static charts with PivotCharts (~30 min)
+
+The 3 charts on the Dashboard (Top Categories, Outreach Themes, Outreach by Campus) are formula-driven so they always show lifetime totals. To make them slicer-responsive, replace them with PivotCharts:
+
+For each existing chart:
+1. Delete it (right-click → Cut).
+2. **Insert** → **PivotChart** → source = `tblVisitor` (or `tblOutreach`).
+3. Configure rows/values per the table below.
+4. Right-click the new PivotChart → **Move Chart** → To: Dashboard.
+5. **PivotChart Analyze** → **Filter Connections** → tick the slicers + timeline.
 
 | Chart | Source | Rows | Values |
 |---|---|---|---|
-| Top categories (h-bar) | `tblVisitor` after **Unpivot** of 24 category columns in Power Query (creates `Category | Count` pairs) | Category | Sum of Count |
-| Daily trend (line) | `tblVisitor` | Submitted at (group by Days) | Sum of How many helped |
-| Section mix (stacked bar) | `tblVisitor` (with a Section bucket lookup column added in Power Query) | Campus → Section bucket | Sum of inquiries |
-| Outreach themes (h-bar) | `tblOutreach` | Outreach Activity | Sum of How many helped |
-| Outreach by campus (col) | `tblOutreach` | Campus | Sum of How many helped |
+| Top categories | `tblVisitor` after Power Query **Unpivot** of the 24 category columns | Category | Sum of Count |
+| Outreach themes | `tblOutreach` | Outreach Activity | Sum of How many helped |
+| Outreach by campus | `tblOutreach` | Campus | Sum of How many helped |
 
-The unpivot-categories step (top-categories chart) is the only finicky one. In Power Query, after loading the visitor data, select all 24 category columns → **Transform** → **Unpivot Columns** → load into a new query named `Visitor unpivoted`. Pivots on this query against `Category` give you sortable, filterable category totals.
+The category unpivot trick: in the existing Visitor query, duplicate the query (Power Query → right-click → Reference), select all 24 category columns, **Transform → Unpivot Columns**. You now have a query with one row per category-per-submission, perfect for top-categories pivots.
+
+## Step 5 — Optional: configure date grouping on the report pivots
+
+The Reports sheets have raw pivots (no grouping). To group them:
+
+**Reports — Weekly:**
+1. Right-click any date row in `ptWeekly` → **Group**.
+2. Tick **Days** with `Number of days: 7`, plus **Months** + **Years**.
+3. Click OK. The pivot rolls up by week.
+
+**Reports — Monthly:**
+1. Same thing on `ptMonthly`.
+2. In **Group**, tick **Months** + **Years** only.
+
+Why this isn't pre-done: date grouping requires real date values in the cache. The placeholder rows are a single year, so grouping pre-load creates funny-looking groups. Do it once after Power Query has loaded real submissions.
+
+For PDF exports: **Page Layout** → Orientation Landscape, **Page Setup** → **Print Area** = the pivot range, then **File** → **Export** → **PDF**.
 
 ---
 
-## Step 5 — Optional: build the Weekly / Monthly Reports sheets
+## Maintenance
 
-Both Reports sheets are placeholders. To build them:
+### Adding a new category in Forms
+After the next submission, the new category appears as a new column in the Forms export. Power Query refresh picks it up. To include it in the "Inquiries logged" KPI tile, edit that formula on the Dashboard sheet.
 
-1. Click into `Reports — Weekly`. **Insert** → **PivotTable** → table = `tblVisitor`.
-2. Pivot config:
-   - **Rows**: `Submitted at` (right-click → **Group** → tick **Days** with `Number of days: 7`, **Months**, **Years**), then `Campus`.
-   - **Values**: Sum of `How many helped`.
-3. Format for print: **Page Layout** → **Orientation: Landscape**, **Page Setup** → **Print Area** = the pivot range.
-4. Same for `Reports — Monthly`, but in **Group**, tick **Months** + **Years** only.
+### Renaming a Forms question
+Power Query will throw on next refresh because it expects the old column name. Edit the query → "Renamed Columns" step → update the mapping. ~30 seconds.
 
-Shannon clicks **File → Export → PDF** for a printable snapshot.
+### Adding a new campus
+Update the helper table on `_Helpers` (rows 4-7) and the heatmap rows on the Dashboard. The Campus slicer auto-updates since it pulls distinct values from the data.
 
 ---
 
-## Regenerating the template
+## Regenerating the template from source
 
-If the schema changes (new categories, renamed columns, etc.), re-run:
+If the schema changes meaningfully (new categories, renamed columns, restructured sections), regenerate from scratch:
 
 ```bash
+# Build the base structure (cross-platform)
 python scripts/build-template.py
+
+# Add pivots, slicers, and reports (Windows + Excel only)
+python scripts/post-build.py
 ```
 
-This rewrites `templates/student-engagement-dashboard-starter.xlsx` from scratch. Requires Python 3 and openpyxl (`pip install openpyxl`).
+The two scripts together produce `templates/student-engagement-dashboard-starter.xlsx`. The first uses openpyxl (cross-platform). The second uses Excel COM via pywin32 (Windows-only) because PivotTables and slicers can only be created by Excel itself.
+
+`pip install openpyxl pywin32` if you don't have them.
 
 ---
 
 ## Power Automate "real" live feed (optional, later)
 
-The Forms→Excel auto-sync from Step 2 is good (~30s latency). If you later want ~5s latency with optional row enrichment, see [`power-automate-flow-spec.md`](power-automate-flow-spec.md). The dashboard doesn't need any changes — the flow writes into a different file you point Power Query at.
+The Forms→Excel auto-sync from Step 2 is good (~30s latency). If you later want ~5s latency with optional row enrichment (e.g., section-bucket lookup, Teams notifications), see [`power-automate-flow-spec.md`](power-automate-flow-spec.md). The dashboard doesn't need any changes — the flow writes into a different file you point Power Query at.

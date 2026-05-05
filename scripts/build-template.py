@@ -142,7 +142,22 @@ BODY_FONT = Font(name="Calibri", size=11, color=TEXT)
 
 # ---------- Sheet builders ----------
 def build_data_sheet(ws, columns, table_name):
-    """Create an Excel structured table with the given columns."""
+    """Create an Excel structured table with the given columns.
+
+    Includes 3 placeholder data rows with distinct dates in
+    `Submitted at` / `Date of activity` so that Excel can recognize the
+    date column as a date type AND derive a multi-day range, which is
+    required for Timeline slicer creation. All three rows have
+    `How many helped` = 0 so they don't affect totals; Power Query
+    "Replace" wipes them when real data flows in.
+    """
+    from datetime import datetime
+    sentinel_dates = [
+        datetime(2024, 1, 1),
+        datetime(2024, 6, 15),
+        datetime(2024, 12, 31),
+    ]
+
     for idx, col_name in enumerate(columns, start=1):
         cell = ws.cell(row=1, column=idx, value=col_name)
         cell.font = HEADER_FONT
@@ -150,12 +165,27 @@ def build_data_sheet(ws, columns, table_name):
         cell.alignment = Alignment(horizontal="left", vertical="center")
         cell.border = border()
 
-    # Add an empty data row so Excel recognizes this as a table with rows
-    for idx in range(1, len(columns) + 1):
-        ws.cell(row=2, column=idx, value=None)
+    # 3 placeholder data rows with distinct dates so Excel can build a Timeline.
+    n_placeholder_rows = len(sentinel_dates)
+    for row_offset, sentinel_date in enumerate(sentinel_dates):
+        row = 2 + row_offset
+        for idx, col_name in enumerate(columns, start=1):
+            cell = ws.cell(row=row, column=idx)
+            if col_name in ("Submitted at", "Date of activity"):
+                cell.value = sentinel_date
+                cell.number_format = (
+                    "yyyy-mm-dd hh:mm"
+                    if col_name == "Submitted at"
+                    else "yyyy-mm-dd"
+                )
+            elif col_name == "How many helped" or col_name in CATEGORIES:
+                cell.value = 0
+            else:
+                cell.value = None
 
     last_col_letter = get_column_letter(len(columns))
-    table_range = f"A1:{last_col_letter}2"
+    last_row = 1 + n_placeholder_rows
+    table_range = f"A1:{last_col_letter}{last_row}"
 
     table = Table(displayName=table_name, ref=table_range)
     table.tableStyleInfo = TableStyleInfo(
