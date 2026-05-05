@@ -19,6 +19,14 @@ Step-by-step instructions for whoever has Forms admin access (Shannon or her del
 
 ---
 
+## A note on question numbering
+
+Microsoft Forms automatically prefixes each question with a number ("1.", "2.", …). **These numbers are managed by Forms, not by you.** When you add or remove a question, Forms renumbers everything after it. Excel exports use the question text as the column header — never the number — so existing pivots that reference categories by header name keep working when new categories are added.
+
+**Practical consequence:** Shannon (or whoever maintains the form later) can add new categories anywhere — top, middle, or bottom of any section — without renaming the existing ones. Forms takes care of the rest.
+
+---
+
 ## Reusable patterns (read once)
 
 ### How to add a Number question
@@ -105,46 +113,46 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 
 ### 2.3 Sections (apply Number pattern to every category — Required: OFF)
 
-> Add a Section with the title shown, then add one Number question per item, in the order listed.
+> Add a Section with the title shown, then add one Number question per category. The order below is the recommended order at launch, but the order is purely cosmetic — Forms auto-numbers, and the column position in the Excel export follows whichever order you build them in.
 
 #### Section 1: Common Help
 *(optional description: "These are the highest-frequency inquiries — fill counts here first.")*
-1. `Wayfinding – General`
-2. `OneCard`
-3. `IT Support`
-4. `Bus Pass / Transportation`
-5. `Parking`
-6. `Timetable / Registration Concern`
+- `Wayfinding – General`
+- `OneCard`
+- `IT Support`
+- `Bus Pass / Transportation`
+- `Parking`
+- `Timetable / Registration Concern`
 
 #### Section 2: Academic & Registration
-1. `Student Fees / Student Financial Services`
-2. `Learning Services / Math Help / Tutors`
-3. `Want to Change Program`
-4. `Connect with Faculty / Program Coordinator / Chair`
+- `Student Fees / Student Financial Services`
+- `Learning Services / Math Help / Tutors`
+- `Want to Change Program`
+- `Connect with Faculty / Program Coordinator / Chair`
 
 #### Section 3: Health & Wellness
-1. `Health Insurance`
-2. `Mental Health Support / Counselling`
-3. `Medical Clinic / Medical Care`
+- `Health Insurance`
+- `Mental Health Support / Counselling`
+- `Medical Clinic / Medical Care`
 
 #### Section 4: Housing & Career
-1. `Housing / Accommodation`
-2. `Job Search / Career Services`
+- `Housing / Accommodation`
+- `Job Search / Career Services`
 
 #### Section 5: International
-1. `Immigration / International Student Advising Referral`
-2. `International Transition Services`
-3. `International Admissions – Second Program`
+- `Immigration / International Student Advising Referral`
+- `International Transition Services`
+- `International Admissions – Second Program`
 
 #### Section 6: Library
-1. `Library – Tech Loans / TeachMeTech`
-2. `Library – Research / Writing Consultants`
-3. `Library – Academic Integrity`
+- `Library – Tech Loans / TeachMeTech`
+- `Library – Research / Writing Consultants`
+- `Library – Academic Integrity`
 
 #### Section 7: CSI & Other
-1. `CSI – Frosh Kits`
-2. `CSI – Peer Advocates`
-3. `Others` *(Number, optional)*
+- `CSI – Frosh Kits`
+- `CSI – Peer Advocates`
+- `Others` *(Number, optional)*
 
 Then add **one final question** (still inside Section 7, no need to start a new section):
 - **Type:** Text → toggle **Long answer: ON**

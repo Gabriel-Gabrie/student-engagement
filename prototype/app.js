@@ -117,9 +117,9 @@ function el(tag, attrs, children) {
   return node;
 }
 
-function questionLabel(num, text, required) {
+function questionLabel(text, required) {
   return el('label', { class: 'q-label' }, [
-    `${num}. ${text}`,
+    text,
     required ? el('span', { class: 'required' }, ' *') : null,
   ]);
 }
@@ -127,10 +127,8 @@ function questionLabel(num, text, required) {
 // ===== Visitor form =====
 
 function renderVisitorForm(form) {
-  let q = 1;
-
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Campus', true),
+    questionLabel('Campus', true),
     el('select', { name: 'campus', required: true }, [
       el('option', { value: '' }, 'Select your answer'),
       ...CAMPUSES.map(c => el('option', { value: c }, c)),
@@ -138,7 +136,7 @@ function renderVisitorForm(form) {
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Time block this submission covers', true),
+    questionLabel('Time block this submission covers', true),
     el('div', { class: 'radio-list' },
       TIME_BLOCKS.map(tb => el('label', {}, [
         el('input', { type: 'radio', name: 'timeBlock', value: tb.value, required: true }),
@@ -148,7 +146,7 @@ function renderVisitorForm(form) {
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'How many people did you help during this time block?', true),
+    questionLabel('How many people did you help during this time block?', true),
     el('input', {
       type: 'number', name: 'peopleHelped', min: 0, step: 1,
       inputmode: 'numeric', required: true, placeholder: '0',
@@ -159,7 +157,7 @@ function renderVisitorForm(form) {
     form.appendChild(el('div', { class: 'section-header' }, section.title));
     for (const item of section.items) {
       form.appendChild(el('div', { class: 'question' }, [
-        questionLabel(q++, item.label, false),
+        questionLabel(item.label, false),
         el('input', {
           type: 'number', name: 'cat_' + item.key, min: 0, step: 1,
           inputmode: 'numeric', placeholder: '0',
@@ -169,7 +167,7 @@ function renderVisitorForm(form) {
   }
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Others (Inquiry)', false),
+    questionLabel('Others (Inquiry)', false),
     el('p', { class: 'help' }, 'If you logged anything under "Others" above, briefly describe what it was about.'),
     el('textarea', { name: 'othersInquiry', rows: 3, placeholder: 'Describe…' }),
   ]));
@@ -211,11 +209,10 @@ function handleVisitorSubmit(e) {
 // ===== Outreach form =====
 
 function renderOutreachForm(form) {
-  let q = 1;
   const today = new Date().toISOString().slice(0, 10);
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Campus', true),
+    questionLabel('Campus', true),
     el('select', { name: 'campus', required: true }, [
       el('option', { value: '' }, 'Select your answer'),
       ...CAMPUSES.map(c => el('option', { value: c }, c)),
@@ -223,12 +220,12 @@ function renderOutreachForm(form) {
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Date of activity', true),
+    questionLabel('Date of activity', true),
     el('input', { type: 'date', name: 'activityDate', required: true, value: today }),
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'How many people did you help at this activity?', true),
+    questionLabel('How many people did you help at this activity?', true),
     el('input', {
       type: 'number', name: 'peopleHelped', min: 0, step: 1,
       inputmode: 'numeric', required: true, placeholder: '0',
@@ -258,12 +255,12 @@ function renderOutreachForm(form) {
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Outreach Activity (select all that apply)', true),
+    questionLabel('Outreach Activity (select all that apply)', true),
     list,
   ]));
 
   form.appendChild(el('div', { class: 'question' }, [
-    questionLabel(q++, 'Notes / Highlights', false),
+    questionLabel('Notes / Highlights', false),
     el('textarea', {
       name: 'notes', rows: 3,
       placeholder: 'Anything Shannon should know — turnout, supply needs, great conversations…',
