@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Student Engagement - Outreach Tracking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="banner">
+    <span>Student Engagement - Outreach Tracking</span>
+    <a href="index.html">&larr; Back</a>
+  </header>
+  <div class="signed-in">
+    Signed in as <strong>demo.user@conestogac.on.ca</strong>
+    <span class="signed-in-note">— in production, Microsoft Forms auto-captures the volunteer's Conestoga login.</span>
+  </div>
+
+  <main class="container">
+    <div class="card">
+      <div class="form-title">Student Engagement - Outreach Tracking</div>
+      <p class="form-description">
+        Welcome! Use this form to log outreach activities. Submit one entry per
+        day worked, even for multi-day campaigns (Pride Month, Black History
+        Month, etc.).
+      </p>
+      <p class="form-meta">* Required</p>
+
+      <form id="outreach-form" novalidate></form>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const form = document.getElementById('outreach-form');
+    renderOutreachForm(form);
+    form.addEventListener('submit', handleOutreachSubmit);
+  </script>
+</body>
+</html>

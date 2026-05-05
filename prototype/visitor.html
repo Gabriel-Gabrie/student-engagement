@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Student Engagement - Visitor Tracking</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="banner">
+    <span>Student Engagement - Visitor Tracking</span>
+    <a href="index.html">&larr; Back</a>
+  </header>
+  <div class="signed-in">
+    Signed in as <strong>demo.user@conestogac.on.ca</strong>
+    <span class="signed-in-note">— in production, Microsoft Forms auto-captures the volunteer's Conestoga login.</span>
+  </div>
+
+  <main class="container">
+    <div class="card">
+      <div class="form-title">Student Engagement - Visitor Tracking</div>
+      <p class="form-description">
+        Use this form to log visitor inquiries at the welcome desk. Submit at the
+        end of every time block (Morning / Afternoon / Evening), or every hour
+        during peak times. Skip past categories that didn't come up — leave them
+        blank. Blank means zero.
+      </p>
+      <p class="form-meta">* Required</p>
+
+      <form id="visitor-form" novalidate></form>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const form = document.getElementById('visitor-form');
+    renderVisitorForm(form);
+    form.addEventListener('submit', handleVisitorSubmit);
+  </script>
+</body>
+</html>

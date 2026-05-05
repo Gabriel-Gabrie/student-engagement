@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Student Engagement Tracking — Option A Preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="banner">
+    <span>Student Engagement Tracking — Option A Preview</span>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h1>Welcome desk forms — proposed redesign</h1>
+      <p class="intro">
+        This is a clickable preview of the proposed Microsoft Forms redesign for
+        the welcome desk. It runs entirely in your browser — nothing is sent
+        anywhere, and no Microsoft accounts are touched. Walk through both forms,
+        submit a few entries, then check the submissions view to see how the data
+        would land in Excel.
+      </p>
+
+      <h2>For volunteers</h2>
+      <ul class="nav">
+        <li><a href="visitor.html">Student Engagement - Visitor Tracking</a> &nbsp;<span class="muted">— log walk-ups at the desk by time block</span></li>
+        <li><a href="outreach.html">Student Engagement - Outreach Tracking</a> &nbsp;<span class="muted">— log a campus event or campaign</span></li>
+      </ul>
+
+      <h2>For Shannon</h2>
+      <ul class="nav">
+        <li><a href="submissions.html">View submissions &amp; export CSV</a> &nbsp;<span class="muted">— see the raw data, download it, pivot in Excel</span></li>
+      </ul>
+
+      <h2>What's different from the current forms</h2>
+      <ul>
+        <li>The 0–10 cap is gone. Counts are real integers — a busy day can finally show 47 wayfinding inquiries.</li>
+        <li>Empty category counts mean zero. Volunteers skip past what didn't come up; in Excel, blanks are treated as 0 by SUM.</li>
+        <li><strong>Time block</strong> (Morning / Afternoon / Evening) is captured on the visitor form for peak-hour analysis.</li>
+        <li>Submitter Name &amp; Email are captured automatically from the volunteer's Conestoga login (built-in Forms behavior — no extra question needed).</li>
+        <li><strong>Outreach Activity is multi-select</strong>. A Pride Month + CCR table is one entry, not two.</li>
+        <li>The 24 visitor categories are grouped into 7 sections, with the most-frequent inquiries (Wayfinding, OneCard, IT Support, Bus Pass, Parking, Timetable) in the first section so volunteers don't have to scroll on a quiet shift.</li>
+      </ul>
+
+      <div class="note-box">
+        <strong>Demo note:</strong> data is stored in your browser's local storage only.
+        Clearing browser data, switching browsers, or opening this in a private window
+        will reset the preview. Click <em>Load sample data</em> on the submissions page
+        for a populated example.
+      </div>
+    </div>
+  </main>
+</body>
+</html>
