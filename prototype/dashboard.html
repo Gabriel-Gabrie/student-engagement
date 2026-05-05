@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Student Engagement Dashboard — Option A+ Preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="banner">
+    <span>Student Engagement Dashboard</span>
+    <a href="index.html">&larr; Back</a>
+  </header>
+  <div class="signed-in">
+    Demo: this is what Shannon's live Excel dashboard will look like, built from the same Forms data.
+    <span class="signed-in-note">— populated from your browser's localStorage; click "Load sample data" on the Submissions page first if it's empty.</span>
+  </div>
+
+  <main class="container wide">
+    <div class="card">
+      <h1>Dashboard</h1>
+      <p class="muted" style="margin-top: -8px;">Filter the data, then read top-down: KPIs → engagement patterns → trends → outreach.</p>
+      <div id="dashboard-root"></div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    renderDashboard(document.getElementById('dashboard-root'));
+  </script>
+</body>
+</html>
