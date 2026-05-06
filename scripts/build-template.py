@@ -296,7 +296,9 @@ def build_dashboard_sheet(ws):
         ws, 4, 1,
         "PEOPLE HELPED (VISITOR)",
         f"=IFERROR(SUM(tblVisitor[{HEADCOUNT_COL}]),0)",
-        "=IFERROR(ROWS(tblVisitor[Id])&\" submissions\",\"No data yet\")",
+        # @ forces scalar evaluation so ROWS doesn't accidentally spill
+        # into the merged cells next door under M365 dynamic-array semantics.
+        "=IFERROR(@ROWS(tblVisitor[Id])&\" submissions\",\"No data yet\")",
     )
     kpi_tile(
         ws, 4, 4,
@@ -314,7 +316,7 @@ def build_dashboard_sheet(ws):
         ws, 4, 10,
         "PEOPLE HELPED (OUTREACH)",
         f"=IFERROR(SUM(tblOutreach[{OUTREACH_HEADCOUNT_COL}]),0)",
-        "=IFERROR(ROWS(tblOutreach[Id])&\" outreach entries\",\"\")",
+        "=IFERROR(@ROWS(tblOutreach[Id])&\" outreach entries\",\"\")",
     )
 
     # Heatmap
