@@ -44,44 +44,46 @@ Both forms stay restricted to "Only people in my organization can respond" (Cone
 
 > **No Volunteer Name field.** Same as the Outreach form — Forms' built-in **Record name** setting captures the volunteer's Conestoga Name and Email automatically.
 
-### Inquiry categories — 7 sections, ordered by likely frequency
+### Inquiry categories — flat single-page list, ordered by likely frequency
 
-Use Forms **Sections** (the "Add new" → "Section" feature) for each header below. The most-frequent inquiries land in Section 1 so a quiet shift can submit without scrolling. All counter questions: **Number**, whole number, ≥ 0, **optional** (blank = 0).
+> **Do NOT use Microsoft Forms Sections.** Each Section forces a page break (Next click), which adds ~6 unnecessary clicks per submission and kills the speed advantage of the redesign. Add all 24 categories in a single flat list. Order alone provides intuitive top-to-bottom grouping; volunteers scroll past zeros (most submissions leave 20+ blank).
 
-**Section 1: Common Help** *(highest-frequency inquiries)*
-- Wayfinding – General
+All counter questions: **Number**, whole number, ≥ 0, **optional** (blank = 0). The grouping headers below are for *your* build reference — do NOT type them into Forms.
+
+**Common Help** *(highest-frequency inquiries)*
+- Wayfinding
 - OneCard
 - IT Support
 - Bus Pass / Transportation
 - Parking
 - Timetable / Registration Concern
 
-**Section 2: Academic & Registration**
+**Academic & Registration**
 - Student Fees / Student Financial Services
 - Learning Services / Math Help / Tutors
 - Want to Change Program
 - Connect with Faculty / Program Coordinator / Chair
 
-**Section 3: Health & Wellness**
+**Health & Wellness**
 - Health Insurance
 - Mental Health Support / Counselling
 - Medical Clinic / Medical Care
 
-**Section 4: Housing & Career**
+**Housing & Career**
 - Housing / Accommodation
 - Job Search / Career Services
 
-**Section 5: International**
+**International**
 - Immigration / International Student Advising Referral
 - International Transition Services
-- International Admissions – Second Program
+- International Admissions - Second Program
 
-**Section 6: Library**
-- Library – Tech Loans / TeachMeTech
-- Library – Research / Writing Consultants
-- Library – Academic Integrity
+**Library**
+- Library - Tech Loans / TeachMeTech
+- Library - Research / Writing Consultants
+- Library - Academic Integrity
 
-**Section 7: CSI & Other**
+**CSI & Other**
 - CSI – Frosh Kits
 - CSI – Peer Advocates
 - Others *(Number)*

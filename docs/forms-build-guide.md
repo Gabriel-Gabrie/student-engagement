@@ -111,54 +111,57 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 | 2 | Choice | `Time block this submission covers` | ✅ | Options: `Morning (open – 12pm)`, `Afternoon (12 – close)`. Multiple answers: OFF. Drop-down list: OFF. |
 | 3 | Number | `How many people did you help during this time block?` | ✅ | Apply Number pattern. |
 
-### 2.3 Sections (apply Number pattern to every category — Required: OFF)
+### 2.3 Categories (single flat list — DO NOT use Sections)
 
-> Add a Section with the title shown, then add one Number question per category. The order below is the recommended order at launch, but the order is purely cosmetic — Forms auto-numbers, and the column position in the Excel export follows whichever order you build them in.
+> **Why no Sections:** Microsoft Forms equates Sections with page breaks. Each Section forces a "Next" click between groups. For a busy desk, that turns a 5-click submission into 12+ clicks. Skip Sections entirely. Add all 24 category questions in a single flat list — order does the visual grouping work, and most submissions will leave 20+ categories blank, so volunteers just scroll past them.
 
-#### Section 1: Common Help
-*(optional description: "These are the highest-frequency inquiries — fill counts here first.")*
-- `Wayfinding – General`
+Add Number questions in this order (apply Number pattern to each — Required: OFF):
+
+**Common Help (highest-frequency)**
+- `Wayfinding`
 - `OneCard`
 - `IT Support`
 - `Bus Pass / Transportation`
 - `Parking`
 - `Timetable / Registration Concern`
 
-#### Section 2: Academic & Registration
+**Academic & Registration**
 - `Student Fees / Student Financial Services`
 - `Learning Services / Math Help / Tutors`
 - `Want to Change Program`
 - `Connect with Faculty / Program Coordinator / Chair`
 
-#### Section 3: Health & Wellness
+**Health & Wellness**
 - `Health Insurance`
 - `Mental Health Support / Counselling`
 - `Medical Clinic / Medical Care`
 
-#### Section 4: Housing & Career
+**Housing & Career**
 - `Housing / Accommodation`
 - `Job Search / Career Services`
 
-#### Section 5: International
+**International**
 - `Immigration / International Student Advising Referral`
 - `International Transition Services`
-- `International Admissions – Second Program`
+- `International Admissions - Second Program`
 
-#### Section 6: Library
-- `Library – Tech Loans / TeachMeTech`
-- `Library – Research / Writing Consultants`
-- `Library – Academic Integrity`
+**Library**
+- `Library - Tech Loans / TeachMeTech`
+- `Library - Research / Writing Consultants`
+- `Library - Academic Integrity`
 
-#### Section 7: CSI & Other
-- `CSI – Frosh Kits`
-- `CSI – Peer Advocates`
+**CSI & Other**
+- `CSI - Frosh Kits`
+- `CSI - Peer Advocates`
 - `Others` *(Number, optional)*
 
-Then add **one final question** (still inside Section 7, no need to start a new section):
+Then add **one final question**:
 - **Type:** Text → toggle **Long answer: ON**
 - **Question:** `Others (Inquiry)`
 - **Required:** OFF
 - **Description / placeholder:** `If you logged anything under "Others" above, briefly describe what it was about.`
+
+The bold group labels above are for *your* reference while building — do NOT type them into Forms. Just add the 24 Number questions in the listed order. The order alone gives the form an intuitive top-to-bottom feel without forcing page breaks.
 
 ### 2.4 Form-level settings
 Same as Form 1:
