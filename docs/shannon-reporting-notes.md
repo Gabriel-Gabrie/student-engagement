@@ -39,7 +39,7 @@ Existing pivots are not affected; these append at the end of the export.
 
 | Form | New column | Notes |
 |---|---|---|
-| Visitor | Time block | Morning / Afternoon / Evening. Use as a pivot row to see peak-hour patterns per campus. |
+| Visitor | Time block | Morning / Afternoon. Use as a pivot row to see peak-hour patterns per campus. |
 | Outreach | Date of activity | This is the **event** date, not the submission date. Use it as your time axis. |
 | Outreach | Notes / Highlights | Free text. Skim weekly. |
 

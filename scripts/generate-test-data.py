@@ -40,16 +40,16 @@ random.seed(42)
 CAMPUSES = ["Waterloo", "Doon", "Reuter", "Cambridge"]
 CAMPUS_WEIGHTS = [0.25, 0.40, 0.20, 0.15]
 
+# Two time blocks (Morning open–12, Afternoon 12–close). Match exact wording
+# in the form so SUMIFS-with-wildcard heatmap formulas catch them.
 TIME_BLOCKS = [
     "Morning (open – 12pm)",
-    "Afternoon (12 – 4pm)",
-    "Evening (4pm – close)",
+    "Afternoon (12 – close)",
 ]
-TIME_BLOCK_WEIGHTS = [0.30, 0.50, 0.20]
+TIME_BLOCK_WEIGHTS = [0.40, 0.60]
 TIME_BLOCK_HOURS = {
     "Morning (open – 12pm)": (8, 12),
-    "Afternoon (12 – 4pm)": (12, 16),
-    "Evening (4pm – close)": (16, 20),
+    "Afternoon (12 – close)": (12, 19),
 }
 
 VOLUNTEERS = [

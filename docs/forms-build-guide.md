@@ -101,14 +101,14 @@ Forms doesn't have a "Number" question type — you use **Text** with a number r
 - `forms.office.com` → **+ New Form**
 - **Title:** `Student Engagement - Visitor Tracking`
 - **Description:**
-  > Welcome! Use this form to log visitor inquiries at the welcome desk. Submit at the end of every time block (Morning / Afternoon / Evening), or every hour during peak times (Welcome Week, exam season). Skip past categories that didn't come up — leave them blank. Blank means zero.
+  > Welcome! Use this form to log visitor inquiries at the welcome desk. Submit at the end of every time block (Morning / Afternoon), or every hour during peak times (Welcome Week, exam season). Skip past categories that didn't come up — leave them blank. Blank means zero.
 
 ### 2.2 Top-of-form questions (no section yet)
 
 | Q | Type | Question | Required | Settings |
 |---|------|----------|----------|----------|
 | 1 | Choice | `Campus` | ✅ | `Waterloo`, `Doon`, `Reuter`, `Cambridge`. **Drop-down list: ON.** |
-| 2 | Choice | `Time block this submission covers` | ✅ | Options: `Morning (open – 12pm)`, `Afternoon (12 – 4pm)`, `Evening (4pm – close)`. Multiple answers: OFF. Drop-down list: OFF. |
+| 2 | Choice | `Time block this submission covers` | ✅ | Options: `Morning (open – 12pm)`, `Afternoon (12 – close)`. Multiple answers: OFF. Drop-down list: OFF. |
 | 3 | Number | `How many people did you help during this time block?` | ✅ | Apply Number pattern. |
 
 ### 2.3 Sections (apply Number pattern to every category — Required: OFF)

@@ -11,8 +11,7 @@ Print this page and keep it at the desk.
 | Time block | Window |
 |---|---|
 | Morning | Open – 12pm |
-| Afternoon | 12pm – 4pm |
-| Evening | 4pm – close |
+| Afternoon | 12pm – close |
 
 **Student Engagement - Outreach Tracking:** once per outreach activity worked. For multi-day events, submit one entry **per day**.
 

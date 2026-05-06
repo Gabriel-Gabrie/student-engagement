@@ -32,14 +32,14 @@ Both forms stay restricted to "Only people in my organization can respond" (Cone
 > **Title:** `Student Engagement - Visitor Tracking` (renamed from "Visitor Tracking - All Campuses - Current")
 
 **Form description (replace existing):**
-> Welcome! Use this form to log visitor inquiries at the welcome desk. Submit **at the end of every time block** (Morning / Afternoon / Evening), or **every hour during peak times** (Welcome Week, exam season). Skip past categories that didn't come up — leave them blank. Blank means zero.
+> Welcome! Use this form to log visitor inquiries at the welcome desk. Submit **at the end of every time block** (Morning / Afternoon), or **every hour during peak times** (Welcome Week, exam season). Skip past categories that didn't come up — leave them blank. Blank means zero.
 
 ### Top-of-form questions
 
 | # | Action | Question | Settings |
 |---|---|---|---|
 | 1 | Keep | Campus | Dropdown. Required. |
-| 2 | **Add** | Time block this submission covers | Single choice. Options: `Morning (open – 12pm)`, `Afternoon (12 – 4pm)`, `Evening (4pm – close)`. Required. |
+| 2 | **Add** | Time block this submission covers | Single choice. Options: `Morning (open – 12pm)`, `Afternoon (12 – close)`. Required. |
 | 3 | **Modify** | How many people did you help during this time block? | Was 0–10 scale → change to **Number**. Whole number, ≥ 0. Required. |
 
 > **No Volunteer Name field.** Same as the Outreach form — Forms' built-in **Record name** setting captures the volunteer's Conestoga Name and Email automatically.

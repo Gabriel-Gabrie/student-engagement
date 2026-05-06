@@ -40,8 +40,9 @@ CAMPUSES = ["Waterloo", "Doon", "Reuter", "Cambridge"]
 
 # Time-block label values are fuzzy — use a wildcard match in formulas so
 # changes to the option text (e.g., en-dash vs hyphen, parens variations)
-# don't break the heatmap.
-TIME_BLOCK_PREFIXES = ["Morning", "Afternoon", "Evening"]
+# don't break the heatmap. The list here drives both the heatmap column
+# count and the wildcard prefix used by SUMIFS.
+TIME_BLOCK_PREFIXES = ["Morning", "Afternoon"]
 
 # Forms exports the column names exactly as the user typed the questions.
 # This list mirrors the user's current form (ASCII hyphens, "Wayfinding"
@@ -322,7 +323,7 @@ def build_dashboard_sheet(ws):
     ws.cell(row=8, column=1, value="Campus").font = HEADER_FONT
     ws.cell(row=8, column=1).fill = HEADER_FILL
     ws.cell(row=8, column=1).alignment = Alignment(horizontal="center", vertical="center")
-    for i, label in enumerate(["Morning", "Afternoon", "Evening"]):
+    for i, label in enumerate(TIME_BLOCK_PREFIXES):
         c = ws.cell(row=8, column=2 + i, value=label)
         c.font = HEADER_FONT
         c.fill = HEADER_FILL
@@ -353,7 +354,8 @@ def build_dashboard_sheet(ws):
         mid_type="percentile", mid_value=50, mid_color=TEAL_MID,
         end_type="max", end_color=TEAL,
     )
-    ws.conditional_formatting.add("B9:D12", rule)
+    last_heatmap_col = get_column_letter(1 + len(TIME_BLOCK_PREFIXES))
+    ws.conditional_formatting.add(f"B9:{last_heatmap_col}12", rule)
 
     # Section dividers — actual chart objects get added by post-build.py.
     add_section_header(ws, 14, "  TOP INQUIRY CATEGORIES — auto-populated from tblVisitorLong")

@@ -1,41 +1,41 @@
 Id	Start time	Completion time	Email	Name	Campus	Time block this submission covers	How many people did you help during this time block?	Wayfinding	OneCard	IT Support	Bus Pass / Transportation	Parking	Timetable / Registration Concern	Student Fees / Student Financial Services	Learning Services / Math Help / Tutors	Want to Change Program	Connect with Faculty / Program Coordinator / Chair	Health Insurance	Mental Health Support / Counselling	Medical Clinic / Medical Care	Housing / Accommodation	Job Search / Career Services	Immigration / International Student Advising Referral	International Transition Services	International Admissions - Second Program	Library - Tech Loans / TeachMeTech	Library - Research / Writing Consultants	Library - Academic Integrity	CSI - Frosh Kits	CSI - Peer Advocates	Others	Others (Inquiry)
-1	2026-03-16 17:44:00	2026-03-16 17:48:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Evening (4pm – close)	7	3	4	2	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	
-2	2026-03-18 13:54:00	2026-03-18 13:58:00	maya.patel@conestogac.on.ca	Maya Patel	Reuter	Afternoon (12 – 4pm)	18	9	4	1	3	0	0	0	0	0	2	1	0	0	0	0	0	0	0	0	0	0	0	0	2	Power outlet location
-3	2026-03-19 11:56:00	2026-03-19 12:00:00	aaron.chen@conestogac.on.ca	Aaron Chen	Waterloo	Afternoon (12 – 4pm)	14	12	0	2	0	0	1	0	0	0	2	0	1	1	0	0	0	2	0	0	2	0	0	0	0	
-4	2026-03-19 13:37:00	2026-03-19 13:40:00	fatima.khan@conestogac.on.ca	Fatima Khan	Doon	Afternoon (12 – 4pm)	9	3	2	0	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	2	Vending machine refund
+1	2026-03-16 08:31:00	2026-03-16 08:35:00	maya.patel@conestogac.on.ca	Maya Patel	Reuter	Morning (open – 12pm)	6	4	0	0	1	0	0	0	1	0	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	
+2	2026-03-18 13:54:00	2026-03-18 13:58:00	maya.patel@conestogac.on.ca	Maya Patel	Reuter	Afternoon (12 – close)	18	9	4	1	3	0	0	0	0	0	2	1	0	0	0	0	0	0	0	0	0	0	0	0	2	Power outlet location
+3	2026-03-19 11:56:00	2026-03-19 12:00:00	aaron.chen@conestogac.on.ca	Aaron Chen	Waterloo	Afternoon (12 – close)	14	12	0	2	0	0	1	0	0	0	2	0	1	1	0	0	0	2	0	0	2	0	0	0	0	
+4	2026-03-20 17:48:00	2026-03-20 17:52:00	sam.rivera@conestogac.on.ca	Sam Rivera	Waterloo	Afternoon (12 – close)	9	9	0	0	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	0	
 5	2026-03-23 10:29:00	2026-03-23 10:32:00	maya.patel@conestogac.on.ca	Maya Patel	Doon	Morning (open – 12pm)	13	3	0	3	0	2	0	0	0	0	2	0	2	0	0	0	3	0	0	0	1	0	0	0	0	
-6	2026-03-23 19:53:00	2026-03-23 19:55:00	fatima.khan@conestogac.on.ca	Fatima Khan	Doon	Evening (4pm – close)	4	0	0	3	0	2	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	
-7	2026-03-24 18:41:00	2026-03-24 18:44:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Evening (4pm – close)	13	9	1	0	0	0	1	0	0	0	2	1	2	1	0	0	0	0	0	0	0	0	0	0	0	
-8	2026-03-25 14:46:00	2026-03-25 14:50:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Doon	Afternoon (12 – 4pm)	9	7	3	0	3	0	1	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	
-9	2026-03-26 15:50:00	2026-03-26 15:52:00	aaron.chen@conestogac.on.ca	Aaron Chen	Doon	Afternoon (12 – 4pm)	10	7	1	0	1	0	0	0	2	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	1	Lost & found
-10	2026-03-27 10:45:00	2026-03-27 10:50:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Morning (open – 12pm)	9	5	1	1	0	0	0	0	0	0	0	1	0	0	2	0	0	0	0	0	2	0	0	0	2	Power outlet location
-11	2026-03-27 12:07:00	2026-03-27 12:09:00	priya.singh@conestogac.on.ca	Priya Singh	Cambridge	Afternoon (12 – 4pm)	18	10	4	0	3	0	0	0	1	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	2	Lost & found
-12	2026-03-30 12:46:00	2026-03-30 12:49:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Afternoon (12 – 4pm)	7	0	1	0	0	0	3	3	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-13	2026-03-30 15:25:00	2026-03-30 15:28:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Afternoon (12 – 4pm)	6	4	0	3	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	
-14	2026-04-02 10:48:00	2026-04-02 10:51:00	jordan.lee@conestogac.on.ca	Jordan Lee	Cambridge	Morning (open – 12pm)	19	2	3	0	3	2	3	0	1	0	0	0	1	0	2	0	0	2	0	0	2	1	2	1	0	
-15	2026-04-03 14:33:00	2026-04-03 14:36:00	fatima.khan@conestogac.on.ca	Fatima Khan	Reuter	Afternoon (12 – 4pm)	1	2	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	
-16	2026-04-03 15:12:00	2026-04-03 15:17:00	aaron.chen@conestogac.on.ca	Aaron Chen	Doon	Afternoon (12 – 4pm)	12	11	4	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	3	0	0	
-17	2026-04-05 08:01:00	2026-04-05 08:04:00	sam.rivera@conestogac.on.ca	Sam Rivera	Cambridge	Morning (open – 12pm)	6	4	0	0	0	0	3	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	
-18	2026-04-05 09:42:00	2026-04-05 09:45:00	priya.singh@conestogac.on.ca	Priya Singh	Waterloo	Morning (open – 12pm)	14	8	4	0	4	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-19	2026-04-08 16:57:00	2026-04-08 17:01:00	aaron.chen@conestogac.on.ca	Aaron Chen	Waterloo	Evening (4pm – close)	9	0	0	0	0	2	0	0	0	0	0	0	0	1	0	2	2	0	0	0	0	0	4	0	1	Power outlet location
-20	2026-04-12 12:21:00	2026-04-12 12:25:00	sam.rivera@conestogac.on.ca	Sam Rivera	Waterloo	Afternoon (12 – 4pm)	14	5	2	3	2	0	3	0	0	0	2	1	0	0	0	0	0	0	0	0	0	0	0	0	0	
-21	2026-04-12 13:41:00	2026-04-12 13:45:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Afternoon (12 – 4pm)	12	12	0	0	0	1	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	2	Tour request
-22	2026-04-13 11:41:00	2026-04-13 11:44:00	jordan.lee@conestogac.on.ca	Jordan Lee	Reuter	Morning (open – 12pm)	15	11	5	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-23	2026-04-13 11:54:00	2026-04-13 11:57:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Morning (open – 12pm)	14	11	0	0	4	0	0	1	0	0	0	0	0	0	1	0	0	0	0	2	1	0	0	0	0	
-24	2026-04-13 13:14:00	2026-04-13 13:16:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Afternoon (12 – 4pm)	9	2	5	0	0	0	2	3	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	
-25	2026-04-13 19:40:00	2026-04-13 19:44:00	aaron.chen@conestogac.on.ca	Aaron Chen	Cambridge	Evening (4pm – close)	13	6	4	0	4	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	0	0	0	0	0	
-26	2026-04-14 07:58:00	2026-04-14 08:03:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Morning (open – 12pm)	8	3	2	0	2	0	1	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	0	0	
-27	2026-04-14 14:34:00	2026-04-14 14:39:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Reuter	Afternoon (12 – 4pm)	15	11	2	0	4	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	
-28	2026-04-14 16:53:00	2026-04-14 16:58:00	sam.rivera@conestogac.on.ca	Sam Rivera	Cambridge	Evening (4pm – close)	20	12	4	2	3	0	2	0	0	0	0	0	0	0	0	2	0	1	0	0	0	1	0	0	0	
-29	2026-04-20 13:45:00	2026-04-20 13:47:00	aaron.chen@conestogac.on.ca	Aaron Chen	Waterloo	Afternoon (12 – 4pm)	9	3	0	0	2	0	0	1	0	0	2	0	0	0	2	0	0	0	0	0	0	0	4	0	0	
-30	2026-04-20 14:11:00	2026-04-20 14:13:00	jordan.lee@conestogac.on.ca	Jordan Lee	Reuter	Afternoon (12 – 4pm)	15	10	3	3	0	0	0	3	1	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	
-31	2026-04-20 14:24:00	2026-04-20 14:29:00	sam.rivera@conestogac.on.ca	Sam Rivera	Reuter	Afternoon (12 – 4pm)	6	3	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	2	2	0	0	0	0	
-32	2026-04-20 15:48:00	2026-04-20 15:52:00	aaron.chen@conestogac.on.ca	Aaron Chen	Doon	Afternoon (12 – 4pm)	11	5	5	0	0	0	1	0	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	
-33	2026-04-24 18:08:00	2026-04-24 18:13:00	maya.patel@conestogac.on.ca	Maya Patel	Doon	Evening (4pm – close)	12	5	0	3	3	2	1	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	
-34	2026-04-26 14:21:00	2026-04-26 14:26:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Afternoon (12 – 4pm)	7	0	5	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	3	0	0	0	0	0	
+6	2026-03-23 18:54:00	2026-03-23 18:58:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Waterloo	Afternoon (12 – close)	7	2	4	0	1	0	0	1	0	0	2	0	0	0	0	0	0	1	0	0	0	0	0	0	0	
+7	2026-03-25 16:43:00	2026-03-25 16:48:00	aaron.chen@conestogac.on.ca	Aaron Chen	Doon	Afternoon (12 – close)	12	7	0	0	4	0	0	3	0	0	0	0	0	0	0	0	3	0	0	0	2	1	0	0	0	
+8	2026-03-26 18:14:00	2026-03-26 18:18:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Afternoon (12 – close)	12	9	0	1	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	2	0	0	1	0	
+9	2026-03-27 10:45:00	2026-03-27 10:50:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Morning (open – 12pm)	9	5	1	1	0	0	0	0	0	0	0	1	0	0	2	0	0	0	0	0	2	0	0	0	2	Power outlet location
+10	2026-03-27 11:36:00	2026-03-27 11:39:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Morning (open – 12pm)	15	11	4	0	0	0	0	0	0	0	2	0	0	0	0	0	0	0	0	2	0	0	0	0	0	
+11	2026-03-30 08:46:00	2026-03-30 08:49:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Morning (open – 12pm)	7	0	1	0	0	0	3	3	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+12	2026-03-30 15:25:00	2026-03-30 15:28:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Afternoon (12 – close)	6	4	0	3	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	
+13	2026-03-30 17:37:00	2026-03-30 17:41:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Afternoon (12 – close)	12	4	4	0	4	0	1	1	0	0	0	0	2	0	1	0	0	0	0	0	0	1	0	0	2	Power outlet location
+14	2026-04-01 08:03:00	2026-04-01 08:05:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Morning (open – 12pm)	9	3	0	1	0	0	0	0	2	0	0	0	0	1	0	0	3	0	0	0	2	0	0	0	0	
+15	2026-04-01 12:50:00	2026-04-01 12:54:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Doon	Afternoon (12 – close)	3	0	0	2	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	1	0	0	0	0	
+16	2026-04-02 15:03:00	2026-04-02 15:07:00	aaron.chen@conestogac.on.ca	Aaron Chen	Waterloo	Afternoon (12 – close)	20	11	3	2	0	1	1	0	0	0	2	0	2	0	0	0	0	0	0	0	0	0	3	0	0	
+17	2026-04-02 16:58:00	2026-04-02 17:03:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Afternoon (12 – close)	8	6	0	2	2	0	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	0	0	0	
+18	2026-04-03 14:33:00	2026-04-03 14:36:00	fatima.khan@conestogac.on.ca	Fatima Khan	Reuter	Afternoon (12 – close)	1	2	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	
+19	2026-04-05 08:01:00	2026-04-05 08:04:00	sam.rivera@conestogac.on.ca	Sam Rivera	Cambridge	Morning (open – 12pm)	6	4	0	0	0	0	3	0	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	
+20	2026-04-05 09:42:00	2026-04-05 09:45:00	priya.singh@conestogac.on.ca	Priya Singh	Waterloo	Morning (open – 12pm)	14	8	4	0	4	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+21	2026-04-06 10:29:00	2026-04-06 10:31:00	maya.patel@conestogac.on.ca	Maya Patel	Waterloo	Morning (open – 12pm)	16	10	4	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	
+22	2026-04-09 08:36:00	2026-04-09 08:41:00	jordan.lee@conestogac.on.ca	Jordan Lee	Doon	Morning (open – 12pm)	10	2	2	0	4	1	2	0	1	0	0	0	0	0	0	0	0	0	0	2	0	0	0	0	0	
+23	2026-04-12 13:41:00	2026-04-12 13:45:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Afternoon (12 – close)	12	12	0	0	0	1	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	0	0	2	Tour request
+24	2026-04-13 09:14:00	2026-04-13 09:16:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Morning (open – 12pm)	9	2	5	0	0	0	2	3	0	0	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	
+25	2026-04-13 14:34:00	2026-04-13 14:36:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Afternoon (12 – close)	6	3	0	1	1	1	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+26	2026-04-13 18:34:00	2026-04-13 18:39:00	jordan.lee@conestogac.on.ca	Jordan Lee	Doon	Afternoon (12 – close)	17	7	1	3	1	0	2	1	1	0	0	0	0	0	0	1	1	0	0	0	2	0	0	0	0	
+27	2026-04-14 07:58:00	2026-04-14 08:03:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Morning (open – 12pm)	8	3	2	0	2	0	1	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	0	0	
+28	2026-04-14 07:59:00	2026-04-14 08:03:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Waterloo	Morning (open – 12pm)	11	4	0	3	2	0	1	0	0	0	0	0	0	0	1	2	0	0	0	0	2	0	0	0	0	
+29	2026-04-14 12:53:00	2026-04-14 12:58:00	sam.rivera@conestogac.on.ca	Sam Rivera	Cambridge	Afternoon (12 – close)	20	12	4	2	3	0	2	0	0	0	0	0	0	0	0	2	0	1	0	0	0	1	0	0	0	
+30	2026-04-14 16:37:00	2026-04-14 16:41:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Reuter	Afternoon (12 – close)	11	10	0	0	0	0	1	0	2	0	0	0	0	1	0	0	0	0	0	0	0	0	2	0	0	
+31	2026-04-16 14:18:00	2026-04-16 14:20:00	priya.singh@conestogac.on.ca	Priya Singh	Cambridge	Afternoon (12 – close)	6	0	4	2	0	0	0	0	0	0	0	0	0	0	0	0	2	0	0	0	2	0	0	0	0	
+32	2026-04-20 13:18:00	2026-04-20 13:23:00	fatima.khan@conestogac.on.ca	Fatima Khan	Cambridge	Afternoon (12 – close)	9	6	0	0	2	0	0	2	2	0	0	1	0	0	0	0	2	1	0	0	0	0	0	0	0	
+33	2026-04-20 14:11:00	2026-04-20 14:13:00	jordan.lee@conestogac.on.ca	Jordan Lee	Reuter	Afternoon (12 – close)	15	10	3	3	0	0	0	3	1	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	
+34	2026-04-27 08:30:00	2026-04-27 08:35:00	sam.rivera@conestogac.on.ca	Sam Rivera	Waterloo	Morning (open – 12pm)	6	3	1	0	3	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
 35	2026-04-27 08:41:00	2026-04-27 08:43:00	jordan.lee@conestogac.on.ca	Jordan Lee	Reuter	Morning (open – 12pm)	8	2	2	3	2	0	0	0	0	0	0	0	2	0	0	0	0	1	0	0	0	1	0	0	0	
-36	2026-04-28 11:28:00	2026-04-28 11:32:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Cambridge	Morning (open – 12pm)	17	6	2	2	2	2	0	3	0	0	2	0	0	0	0	0	0	0	0	0	2	0	0	0	0	
-37	2026-04-28 12:14:00	2026-04-28 12:19:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Reuter	Afternoon (12 – 4pm)	10	7	0	2	4	1	0	0	0	0	0	2	0	0	0	0	0	1	0	0	0	0	0	0	0	
-38	2026-04-29 14:58:00	2026-04-29 15:02:00	fatima.khan@conestogac.on.ca	Fatima Khan	Waterloo	Afternoon (12 – 4pm)	10	8	2	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-39	2026-04-30 13:19:00	2026-04-30 13:23:00	sam.rivera@conestogac.on.ca	Sam Rivera	Doon	Afternoon (12 – 4pm)	10	0	3	0	3	1	0	0	0	0	0	0	1	0	2	0	0	0	0	0	2	0	0	0	0	
-40	2026-05-04 11:00:00	2026-05-04 11:03:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Doon	Morning (open – 12pm)	2	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2	Power outlet location
+36	2026-04-27 14:04:00	2026-04-27 14:09:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Doon	Afternoon (12 – close)	12	9	0	0	0	0	2	0	2	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	Power outlet location
+37	2026-04-30 13:40:00	2026-04-30 13:45:00	maya.patel@conestogac.on.ca	Maya Patel	Waterloo	Afternoon (12 – close)	8	0	5	2	0	0	0	0	2	1	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
+38	2026-05-04 11:00:00	2026-05-04 11:03:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Doon	Morning (open – 12pm)	2	0	2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2	Power outlet location
+39	2026-05-04 15:57:00	2026-05-04 16:01:00	lucas.tremblay@conestogac.on.ca	Lucas Tremblay	Reuter	Afternoon (12 – close)	12	6	0	2	2	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	1	4	0	0	
+40	2026-05-04 17:59:00	2026-05-04 18:01:00	priya.singh@conestogac.on.ca	Priya Singh	Doon	Afternoon (12 – close)	11	8	0	3	3	0	0	0	0	0	0	1	0	0	0	0	3	0	0	0	0	0	0	0	0	
