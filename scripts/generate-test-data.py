@@ -2,9 +2,15 @@
 """
 Generate realistic test data for the dashboard demo.
 
-Outputs two tab-separated files matching the Microsoft Forms export shapes:
-- templates/test-data/visitor-test-data.tsv  (~40 rows)
-- templates/test-data/outreach-test-data.tsv (~12 rows)
+Outputs four files matching the Microsoft Forms export shapes:
+- templates/test-data/visitor-test-data.tsv      (~40 rows, paste-friendly)
+- templates/test-data/outreach-test-data.tsv     (~12 rows, paste-friendly)
+- templates/test-data/Visitor Test Data.xlsx     (Power Query-friendly)
+- templates/test-data/Outreach Test Data.xlsx    (Power Query-friendly)
+
+Use the .xlsx versions if the live Forms responses files are giving you
+trouble — temporarily repoint your Power Query at the test files, refresh,
+demo, then point Power Query back at the real Forms responses.
 
 Distribution mirrors what you'd plausibly see at Conestoga's welcome desks:
 - Doon busiest, then Waterloo, Reuter, Cambridge
@@ -22,6 +28,10 @@ import csv
 import random
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
 
 
 random.seed(42)
@@ -270,14 +280,66 @@ def write_tsv(path, headers, rows):
     print(f"Wrote {path}  ({len(rows)} rows)")
 
 
+def write_xlsx(path, headers, rows, sheet_name="Sheet1", date_columns=()):
+    """Mimic the Forms 'Open in Excel' export: a single sheet with the data
+    in a structured table. Power Query reads this exactly like a real
+    Forms responses file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    wb = Workbook()
+    ws = wb.active
+    ws.title = sheet_name
+
+    # Header row
+    for col_idx, h in enumerate(headers, start=1):
+        ws.cell(row=1, column=col_idx, value=h)
+
+    # Data rows — parse date columns into datetimes so Excel sees them as dates
+    date_col_indexes = {headers.index(c) for c in date_columns if c in headers}
+    for row_idx, row in enumerate(rows, start=2):
+        for col_idx, value in enumerate(row):
+            if col_idx in date_col_indexes and isinstance(value, str):
+                # Try datetime first, then date
+                try:
+                    parsed = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    try:
+                        parsed = datetime.strptime(value, "%Y-%m-%d").date()
+                    except ValueError:
+                        parsed = value
+                ws.cell(row=row_idx, column=col_idx + 1, value=parsed)
+            else:
+                ws.cell(row=row_idx, column=col_idx + 1, value=value)
+
+    # Column widths and date formats
+    for col_idx, h in enumerate(headers, start=1):
+        col_letter = get_column_letter(col_idx)
+        ws.column_dimensions[col_letter].width = max(12, min(40, len(h) + 2))
+        if col_idx - 1 in date_col_indexes:
+            for row_idx in range(2, len(rows) + 2):
+                ws.cell(row=row_idx, column=col_idx).number_format = (
+                    "yyyy-mm-dd hh:mm" if "time" in h.lower() else "yyyy-mm-dd"
+                )
+
+    # Wrap in an Excel table — Power Query and pivots like this
+    last_col = get_column_letter(len(headers))
+    last_row = len(rows) + 1
+    table = Table(displayName=sheet_name, ref=f"A1:{last_col}{last_row}")
+    table.tableStyleInfo = TableStyleInfo(
+        name="TableStyleMedium2", showRowStripes=True
+    )
+    ws.add_table(table)
+    ws.freeze_panes = "A2"
+
+    wb.save(path)
+    print(f"Wrote {path}  ({len(rows)} rows)")
+
+
 def main():
     repo_root = Path(__file__).resolve().parent.parent
     out_dir = repo_root / "templates" / "test-data"
 
     visitor_rows = generate_visitor_rows()
     outreach_rows = generate_outreach_rows()
-
-    write_tsv(out_dir / "visitor-test-data.tsv", VISITOR_HEADERS, visitor_rows)
 
     outreach_headers = [
         "Id",
@@ -290,7 +352,26 @@ def main():
         "How many people attended the outreach activity?",
         "Outreach Activity",
     ]
+
+    write_tsv(out_dir / "visitor-test-data.tsv", VISITOR_HEADERS, visitor_rows)
     write_tsv(out_dir / "outreach-test-data.tsv", outreach_headers, outreach_rows)
+
+    # XLSX versions for Power Query repointing — sheet name / table name = "Sheet1"
+    # so the existing query just sees the same shape it expects.
+    write_xlsx(
+        out_dir / "Visitor Test Data.xlsx",
+        VISITOR_HEADERS,
+        visitor_rows,
+        sheet_name="Sheet1",
+        date_columns=("Start time", "Completion time"),
+    )
+    write_xlsx(
+        out_dir / "Outreach Test Data.xlsx",
+        outreach_headers,
+        outreach_rows,
+        sheet_name="Sheet1",
+        date_columns=("Start time", "Completion time", "Date of outreach activity"),
+    )
 
     # Quick sanity
     total_helped = sum(r[7] for r in visitor_rows)
