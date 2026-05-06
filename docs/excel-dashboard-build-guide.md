@@ -49,11 +49,15 @@ For each form (Visitor first, then Outreach), open the form in `forms.office.com
 3. The Power Query editor opens. On the right, in the **Query Settings** panel, change the query Name to `Visitor`.
 4. **Home** → **Close & Load To...** → **Table** → **Existing worksheet** → click cell `A1` of the **Visitor** sheet → click OK.
 5. Excel asks if you want to replace the existing table. Click **Replace** (or **Yes**).
-6. The data loads. The table is now named `tblVisitor` and contains your Forms responses with all the original column names.
+6. **Verify the table name.** Click any cell inside the loaded table. The **Table Design** ribbon tab appears. Look at the **Table Name** box on the left. If it shows anything OTHER than `tblVisitor` (often it shows `Visitor`, `Sheet1`, or the query name), type `tblVisitor` and press Enter. The KPI tiles and heatmap won't work until the table name matches.
 
 ### 2c. Outreach query
 
 Same as 2b but with `Outreach Responses.xlsx`, loaded into the **Outreach** sheet (replacing `tblOutreach`).
+
+**Same table-name verification applies**: after loading, click into the table → Table Design tab → confirm name is `tblOutreach`, rename if it's anything else (e.g., `Outreach`, `Sheet1`).
+
+**Common mistake to avoid:** in step 1, double-check the file picker is showing `Outreach Responses.xlsx` and not the dashboard workbook itself. If the Outreach query gets pointed at the dashboard file, Refresh All will fail with "We couldn't get the data from 'tblOutreach' in the workbook ..." (because that's a self-reference).
 
 ### 2d. VisitorLong query (this is the new piece — read carefully)
 
@@ -174,7 +178,8 @@ Requires `pip install openpyxl pywin32` and Excel installed for the post-build s
 
 | Symptom | Likely fix |
 |---|---|
-| `#REF!` in a KPI tile | A column name in your Forms export doesn't match what the formula expects. Click the cell, see which column it references, check `tblVisitor`'s headers. |
+| `#REF!` in a KPI tile | First check the table name — click into the data table, Table Design tab → name should be `tblVisitor` / `tblOutreach` / `tblVisitorLong` exactly. If wrong, rename. If table name is right, then a column name doesn't match — click the #REF! cell, see which column it references, check the data table's headers. |
+| Refresh All says "We couldn't get the data from 'tblOutreach' in the workbook ..." with the dashboard file's URL | The Outreach query's Source step points at the dashboard file (self-reference), not at the Outreach Responses file. Edit the query → look at the Source step's path → if wrong, delete the query and recreate it pointing at `Outreach Responses.xlsx`. |
 | Heatmap is all zeros even with data | Time block question wording must START with "Morning", "Afternoon", or "Evening". Heatmap uses wildcard match (`Morning*`) so anything starting with those words works. If your options use different wording, edit the formulas on Dashboard rows 9–12. |
 | Top Categories chart is empty | The `VisitorLong` query didn't load. Reopen Power Query → make sure the query exists and the Unpivot step is the last/last-meaningful step → Close & Load. |
 | Slicer shows `(blank)` as an option | You have rows in `tblVisitor` with empty Campus or Time block. Either there are placeholder rows still around, or some Forms submissions skipped a required field somehow. Check the data. |
