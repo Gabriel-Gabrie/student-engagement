@@ -52,6 +52,7 @@ XL_COLUMN_FIELD = 2
 XL_DATA_FIELD = 4
 XL_SUM = -4157
 XL_SHEET_VERY_HIDDEN = 2
+XL_MISSING_ITEMS_NONE = 0
 
 # Field names from build-template.py
 HEADCOUNT = "How many people did you help during this time block?"
@@ -112,6 +113,8 @@ def main():
         cache_v = wb.PivotCaches().Create(
             SourceType=XL_DATABASE, SourceData="tblVisitor"
         )
+        # Don't retain deleted items — keeps slicers from showing stale values
+        cache_v.MissingItemsLimit = XL_MISSING_ITEMS_NONE
 
         print("Building slicer-host pivot ...")
         pt_host = cache_v.CreatePivotTable(
@@ -192,6 +195,7 @@ def main():
             cache_long = wb.PivotCaches().Create(
                 SourceType=XL_DATABASE, SourceData="tblVisitorLong"
             )
+            cache_long.MissingItemsLimit = XL_MISSING_ITEMS_NONE
             # Park the pivot on the hidden _PivotHost sheet (column D so it
             # doesn't overlap ptSlicerHost in column A).
             pt_top = cache_long.CreatePivotTable(
@@ -224,6 +228,7 @@ def main():
             cache_o = wb.PivotCaches().Create(
                 SourceType=XL_DATABASE, SourceData="tblOutreach"
             )
+            cache_o.MissingItemsLimit = XL_MISSING_ITEMS_NONE
             pt_themes = cache_o.CreatePivotTable(
                 TableDestination=host.Range("G1"),
                 TableName="ptOutreachThemes",
